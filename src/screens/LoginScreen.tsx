@@ -3,7 +3,7 @@ import * as firebaseui from "firebaseui";
 import React, { useCallback } from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { BasicLayout } from "../composites/BasicLayout";
-import { useUser } from "../models/User";
+import { useCurrentUser } from "../models/User";
 import { ErrorScreen } from "./ErrorScreen";
 import { LoadingScreen } from "./LoadingScreen";
 
@@ -18,7 +18,7 @@ const uiConfig: firebaseui.auth.Config = {
 };
 
 export const LoginScreen: React.FC = () => {
-  const [user, userReady, userError] = useUser(auth);
+  const [user, userReady, userError] = useCurrentUser(auth);
 
   const onLogOutClick = useCallback(async () => {
     await auth.signOut();

@@ -7,7 +7,7 @@ import {
   knowledgePath,
   useLatestKnowledges,
 } from "../../models/Knowledge";
-import { useUser } from "../../models/User";
+import { useCurrentUser } from "../../models/User";
 import { ErrorScreen } from "../ErrorScreen";
 import { LoadingScreen } from "../LoadingScreen";
 import { LoginScreen } from "../LoginScreen";
@@ -16,7 +16,7 @@ const auth = firebase.auth();
 const fs = firebase.firestore();
 
 export const KBIndexPage: React.FC = () => {
-  const [user, userReady, userError] = useUser(auth);
+  const [user, userReady, userError] = useCurrentUser(auth);
   const [knowledges, knowledgesReady, knowledgesError] = useLatestKnowledges(
     fs,
     user

@@ -9,7 +9,7 @@ import {
   saveKnowledge,
   useKnowledge,
 } from "../../models/Knowledge";
-import { useUser } from "../../models/User";
+import { useCurrentUser } from "../../models/User";
 import { KBEditForm } from "../../stables/KBEditForm";
 import { ErrorScreen } from "../ErrorScreen";
 import { LoadingScreen } from "../LoadingScreen";
@@ -21,7 +21,7 @@ const fs = firebase.firestore();
 
 export const KBEditPage: React.FC = () => {
   const { id } = useParams();
-  const [user, userReady, userError] = useUser(auth);
+  const [user, userReady, userError] = useCurrentUser(auth);
   const [knowledge, knowledgeReady, knowledgeError] = useKnowledge(
     fs,
     user,

@@ -68,8 +68,8 @@ export function useLatestKnowledges(
 
     setReady(false);
 
-    // TODO get latest items for user
-    const coll = getCollection(fs);
+    // TODO get items for user
+    const coll = getCollection(fs).orderBy("updatedAt", "desc");
     return coll.onSnapshot(
       (ss) => {
         setReady(true);

@@ -47,6 +47,7 @@ export const KBViewPage: React.FC = () => {
         {" | "}
         <Link to={knowledgePath("edit", knowledge)}>Edit</Link>
       </p>
+      <p>{knowledge.updatedAt.toDate().toLocaleString()}</p>
       <NiceMarkdown content={knowledge.content} />
     </BasicLayout>
   );

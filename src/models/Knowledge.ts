@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { noop } from "../misc/misc";
-import { createDataRecord, DataRecord } from "./DataRecord";
+import { createDataRecord, DataRecord, updateTimestamp } from "./DataRecord";
 
 export interface Knowledge extends DataRecord {
   content: string;
@@ -137,15 +137,17 @@ export async function saveKnowledge(
 ): Promise<Knowledge> {
   const coll = getCollection(fs);
 
-  if (knowledge.id) {
-    const doc = coll.doc(knowledge.id);
-    await doc.set(knowledge);
-    return knowledge;
+  const present = updateTimestamp(knowledge);
+
+  if (present.id) {
+    const doc = coll.doc(present.id);
+    await doc.set(present);
+    return present;
   }
 
-  const doc = await coll.add(knowledge);
+  const doc = await coll.add(present);
   return {
-    ...knowledge,
+    ...present,
     id: doc.id,
   };
 }

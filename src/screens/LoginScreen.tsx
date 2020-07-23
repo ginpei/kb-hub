@@ -3,9 +3,9 @@ import * as firebaseui from "firebaseui";
 import React, { useCallback } from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { BasicLayout } from "../composites/BasicLayout";
-import { useUser } from "../misc/firebaseHooks";
-import { LoadingScreen } from "./LoadingScreen";
+import { useUser } from "../models/User";
 import { ErrorScreen } from "./ErrorScreen";
+import { LoadingScreen } from "./LoadingScreen";
 
 const auth = firebase.auth();
 

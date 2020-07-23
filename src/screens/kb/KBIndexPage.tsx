@@ -2,12 +2,12 @@ import firebase from "firebase/app";
 import React from "react";
 import { Link } from "react-router-dom";
 import { BasicLayout } from "../../composites/BasicLayout";
-import { useUser } from "../../misc/firebaseHooks";
 import {
   Knowledge,
   knowledgePath,
   useLatestKnowledges,
 } from "../../models/Knowledge";
+import { useUser } from "../../models/User";
 import { ErrorScreen } from "../ErrorScreen";
 import { LoadingScreen } from "../LoadingScreen";
 import { LoginScreen } from "../LoginScreen";

@@ -3,13 +3,13 @@ import firebase from "firebase/app";
 import React, { useCallback, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { BasicLayout } from "../../composites/BasicLayout";
-import { useUser } from "../../misc/firebaseHooks";
 import {
   Knowledge,
   knowledgePath,
   saveKnowledge,
   useKnowledge,
 } from "../../models/Knowledge";
+import { useUser } from "../../models/User";
 import { KBEditForm } from "../../stables/KBEditForm";
 import { ErrorScreen } from "../ErrorScreen";
 import { LoadingScreen } from "../LoadingScreen";

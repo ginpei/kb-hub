@@ -76,8 +76,36 @@ export function useLatestKnowledges(
   return [knowledges, ready, error];
 }
 
+export function useKnowledge(
+  fs: firebase.firestore.Firestore,
+  id: string
+): [Knowledge | null, boolean, Error | null] {
+  const [knowledge, setKnowledge] = useState<Knowledge | null>(null);
+  const [ready, setReady] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    const ref = fs.collection("knowledges").doc(id);
+    return ref.onSnapshot(
+      (ss) => {
+        setReady(true);
+        setError(null);
+
+        const values = docToKnowledge(ss);
+        setKnowledge(values);
+      },
+      (e) => {
+        setReady(true);
+        setError(e);
+      }
+    );
+  }, [fs, id]);
+
+  return [knowledge, ready, error];
+}
+
 function docToKnowledge(
-  ss: firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>
+  ss: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>
 ): Knowledge {
   const data = ss.data();
   const knowledge: Knowledge = {

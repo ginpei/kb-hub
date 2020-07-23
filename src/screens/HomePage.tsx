@@ -8,6 +8,9 @@ export const HomePage: React.FC = () => {
       <h1>Knowledge Base Hub</h1>
       <ul>
         <li>
+          <Link to="/kb">Knowledge base index</Link>
+        </li>
+        <li>
           <Link to="/login">Login</Link>
         </li>
       </ul>

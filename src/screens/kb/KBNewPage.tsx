@@ -29,7 +29,7 @@ export const KBNewPage: React.FC = () => {
     const savedKnowledge = await saveKnowledge(fs, knowledge);
     setSaving(false);
     history.push(knowledgePath("view", savedKnowledge));
-  }, [knowledge]);
+  }, [knowledge, history]);
 
   return (
     <BasicLayout title="New knowledge">

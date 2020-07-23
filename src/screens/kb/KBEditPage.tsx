@@ -53,7 +53,7 @@ const PageContent: React.FC<{ knowledge: Knowledge }> = ({
     await saveKnowledge(fs, knowledge);
     setSaving(false);
     history.push(knowledgePath("view", knowledge));
-  }, [knowledge]);
+  }, [knowledge, history]);
 
   return (
     <BasicLayout title="View">

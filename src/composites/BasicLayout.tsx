@@ -1,24 +1,6 @@
-import React, { CSSProperties, useEffect } from "react";
-
-const styles: Record<string, CSSProperties> = {
-  header: {
-    backgroundColor: "var(--color-theme-bg)",
-    color: "var(--color-theme-fg)",
-    height: "2rem",
-    lineHeight: "2rem",
-  },
-
-  main: {
-    minHeight: "50vh",
-  },
-
-  footer: {
-    borderTop: "dashed 1px var(--color-theme-lightBorder)",
-    marginTop: "1rem",
-    paddingBottom: "4rem",
-    paddingTop: "1rem",
-  },
-};
+import React, { useEffect } from "react";
+import styles from "./BasicLayout.module.scss";
+import { jcn } from "../misc/misc";
 
 export const BasicLayout: React.FC<{
   title?: string;
@@ -31,13 +13,11 @@ export const BasicLayout: React.FC<{
 
   return (
     <div className="BasicLayout">
-      <div className="header" style={styles.header}>
+      <div className={styles.header}>
         <div className="headerInner ui-container">Knowledge Base Hub</div>
       </div>
-      <div className="main ui-container" style={styles.main}>
-        {children}
-      </div>
-      <div className="footer" style={styles.footer}>
+      <div className={jcn(styles.main, "ui-container")}>{children}</div>
+      <div className={styles.footer}>
         <div className="footerInner ui-container">Footer</div>
       </div>
     </div>

@@ -1,0 +1,17 @@
+.header {
+  background-color: var(--color-theme-bg);
+  color: var(--color-theme-fg);
+  height: 2rem;
+  line-height: 2rem;
+}
+
+.main {
+  min-height: 50vh;
+}
+
+.footer {
+  border-top: dashed 1px var(--color-theme-lightBorder);
+  margin-top: 1rem;
+  padding-bottom: 4rem;
+  padding-top: 1rem;
+}

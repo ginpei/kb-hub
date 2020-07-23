@@ -1,9 +1,10 @@
 import React from "react";
+import { BasicLayout } from "../composites/BasicLayout";
 
 export const NotFoundPage: React.FC = () => {
   return (
-    <div className="NotFoundPage">
+    <BasicLayout title="Not found">
       <h1>Not found</h1>
-    </div>
+    </BasicLayout>
   );
 };

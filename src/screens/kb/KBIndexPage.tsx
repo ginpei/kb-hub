@@ -1,26 +1,36 @@
+import firebase from "firebase/app";
 import React from "react";
 import { Link } from "react-router-dom";
 import { BasicLayout } from "../../composites/BasicLayout";
 import {
-  createKnowledge,
   Knowledge,
   knowledgePath,
+  useLatestKnowledges,
 } from "../../models/Knowledge";
+import { ErrorScreen } from "../ErrorScreen";
+import { LoadingScreen } from "../LoadingScreen";
 
-const dummyKnowledges: Knowledge[] = [
-  createKnowledge({ id: "1", title: "One" }),
-  createKnowledge({ id: "2", title: "Two" }),
-];
+const fs = firebase.firestore();
 
 export const KBIndexPage: React.FC = () => {
+  const [knowledges, knowledgeReady, knowledgesError] = useLatestKnowledges(fs);
+
+  if (!knowledgeReady) {
+    return <LoadingScreen />;
+  }
+
+  if (knowledgesError) {
+    return <ErrorScreen error={knowledgesError} />;
+  }
+
   return (
     <BasicLayout title="Knowledge base index">
       <h1>Knowledge base index</h1>
       <p>
         <Link to={knowledgePath("new")}>New knowledge</Link>
       </p>
-      {dummyKnowledges.map((knowledge) => (
-        <KBItem knowledge={knowledge} />
+      {knowledges.map((knowledge) => (
+        <KBItem key={knowledge.id} knowledge={knowledge} />
       ))}
     </BasicLayout>
   );

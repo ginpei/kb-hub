@@ -13,9 +13,11 @@ import { LoadingScreen } from "../LoadingScreen";
 const fs = firebase.firestore();
 
 export const KBIndexPage: React.FC = () => {
-  const [knowledges, knowledgeReady, knowledgesError] = useLatestKnowledges(fs);
+  const [knowledges, knowledgesReady, knowledgesError] = useLatestKnowledges(
+    fs
+  );
 
-  if (!knowledgeReady) {
+  if (!knowledgesReady) {
     return <LoadingScreen />;
   }
 

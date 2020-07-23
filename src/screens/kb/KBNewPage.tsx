@@ -14,6 +14,7 @@ const fs = firebase.firestore();
 
 export const KBNewPage: React.FC = () => {
   const [knowledge, setKnowledge] = useState(createKnowledge());
+  const [saving, setSaving] = useState(false);
   const history = useHistory();
 
   const onChange = useCallback(
@@ -24,7 +25,9 @@ export const KBNewPage: React.FC = () => {
   );
 
   const onSubmit = useCallback(async () => {
+    setSaving(true);
     const savedKnowledge = await saveKnowledge(fs, knowledge);
+    setSaving(false);
     history.push(knowledgePath("view", savedKnowledge));
   }, [knowledge]);
 
@@ -35,6 +38,7 @@ export const KBNewPage: React.FC = () => {
         <Link to={knowledgePath("index")}>Back</Link>
       </p>
       <KBEditForm
+        disabled={saving}
         knowledge={knowledge}
         onChange={onChange}
         onSubmit={onSubmit}

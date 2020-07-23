@@ -2,10 +2,11 @@ import React, { useCallback } from "react";
 import { Knowledge } from "../models/Knowledge";
 
 export const KBEditForm: React.FC<{
+  disabled: boolean;
   knowledge: Knowledge;
   onChange: (Knowledge: Partial<Knowledge>) => void;
   onSubmit: (Knowledge: Knowledge) => void;
-}> = ({ knowledge, onChange, onSubmit }) => {
+}> = ({ disabled, knowledge, onChange, onSubmit }) => {
   const onFormSubmit = useCallback(
     (event: React.FormEvent) => {
       event.preventDefault();
@@ -28,6 +29,7 @@ export const KBEditForm: React.FC<{
         <label>
           Title:
           <input
+            disabled={disabled}
             name="title"
             onChange={onTextChange}
             type="text"
@@ -40,6 +42,7 @@ export const KBEditForm: React.FC<{
           Content:
           <br />
           <textarea
+            disabled={disabled}
             name="content"
             onChange={onTextChange}
             value={knowledge.content}
@@ -47,7 +50,9 @@ export const KBEditForm: React.FC<{
         </label>
       </p>
       <p>
-        <button>{knowledge.id ? "Update" : "Create"}</button>
+        <button disabled={disabled}>
+          {knowledge.id ? "Update" : "Create"}
+        </button>
       </p>
     </form>
   );

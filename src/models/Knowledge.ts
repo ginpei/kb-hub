@@ -57,8 +57,8 @@ export function useLatestKnowledges(
 
   useEffect(() => {
     // TODO
-    const ref = fs.collection("knowledges");
-    return ref.onSnapshot(
+    const coll = getCollection(fs);
+    return coll.onSnapshot(
       (ss) => {
         setReady(true);
         setError(null);
@@ -85,8 +85,8 @@ export function useKnowledge(
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const ref = fs.collection("knowledges").doc(id);
-    return ref.onSnapshot(
+    const doc = getCollection(fs).doc(id);
+    return doc.onSnapshot(
       (ss) => {
         setReady(true);
         setError(null);
@@ -102,6 +102,10 @@ export function useKnowledge(
   }, [fs, id]);
 
   return [knowledge, ready, error];
+}
+
+function getCollection(fs: firebase.firestore.Firestore) {
+  return fs.collection("knowledges");
 }
 
 function docToKnowledge(

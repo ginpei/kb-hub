@@ -1,3 +1,7 @@
+export const noop: () => void = () => {
+  /* void */
+};
+
 /**
  * Join class names.
  * @example

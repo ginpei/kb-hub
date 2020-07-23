@@ -17,7 +17,7 @@ const uiConfig: firebaseui.auth.Config = {
   ],
 };
 
-export const LoginPage: React.FC = () => {
+export const LoginScreen: React.FC = () => {
   const [user, userReady, userError] = useUser(auth);
 
   const onLogOutClick = useCallback(async () => {

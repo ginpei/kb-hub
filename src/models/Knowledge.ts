@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
-import { DataRecord, createDataRecord } from "./DataRecord";
+import { useEffect, useState } from "react";
+import { noop } from "../misc/misc";
+import { createDataRecord, DataRecord } from "./DataRecord";
 
 export interface Knowledge extends DataRecord {
   content: string;
@@ -49,14 +50,25 @@ export function knowledgePath(
 }
 
 export function useLatestKnowledges(
-  fs: firebase.firestore.Firestore
+  fs: firebase.firestore.Firestore,
+  user: firebase.User | null
 ): [Knowledge[], boolean, Error | null] {
   const [knowledges, setKnowledges] = useState<Knowledge[]>([]);
   const [ready, setReady] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    // TODO
+    setKnowledges([]);
+    setError(null);
+
+    if (!user) {
+      setReady(true);
+      return noop;
+    }
+
+    setReady(false);
+
+    // TODO get latest items for user
     const coll = getCollection(fs);
     return coll.onSnapshot(
       (ss) => {
@@ -71,7 +83,7 @@ export function useLatestKnowledges(
         setError(e);
       }
     );
-  }, [fs]);
+  }, [fs, user]);
 
   return [knowledges, ready, error];
 }

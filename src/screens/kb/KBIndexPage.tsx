@@ -2,6 +2,7 @@ import firebase from "firebase/app";
 import React from "react";
 import { Link } from "react-router-dom";
 import { BasicLayout } from "../../composites/BasicLayout";
+import { useUser } from "../../misc/firebaseHooks";
 import {
   Knowledge,
   knowledgePath,
@@ -9,20 +10,29 @@ import {
 } from "../../models/Knowledge";
 import { ErrorScreen } from "../ErrorScreen";
 import { LoadingScreen } from "../LoadingScreen";
+import { LoginScreen } from "../LoginScreen";
 
+const auth = firebase.auth();
 const fs = firebase.firestore();
 
 export const KBIndexPage: React.FC = () => {
+  const [user, userReady, userError] = useUser(auth);
   const [knowledges, knowledgesReady, knowledgesError] = useLatestKnowledges(
-    fs
+    fs,
+    user
   );
 
-  if (!knowledgesReady) {
+  if (!userReady || !knowledgesReady) {
     return <LoadingScreen />;
   }
 
-  if (knowledgesError) {
-    return <ErrorScreen error={knowledgesError} />;
+  if (!user) {
+    return <LoginScreen />;
+  }
+
+  const error = userError || knowledgesError;
+  if (error) {
+    return <ErrorScreen error={error} />;
   }
 
   return (

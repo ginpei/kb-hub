@@ -3,6 +3,7 @@ import firebase from "firebase/app";
 import React, { useCallback, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { BasicLayout } from "../../composites/BasicLayout";
+import { useUser } from "../../misc/firebaseHooks";
 import {
   Knowledge,
   knowledgePath,
@@ -12,20 +13,32 @@ import {
 import { KBEditForm } from "../../stables/KBEditForm";
 import { ErrorScreen } from "../ErrorScreen";
 import { LoadingScreen } from "../LoadingScreen";
+import { LoginScreen } from "../LoginScreen";
 import { NotFoundScreen } from "../NotFoundScreen";
 
+const auth = firebase.auth();
 const fs = firebase.firestore();
 
 export const KBEditPage: React.FC = () => {
   const { id } = useParams();
-  const [knowledge, knowledgeReady, knowledgeError] = useKnowledge(fs, id);
+  const [user, userReady, userError] = useUser(auth);
+  const [knowledge, knowledgeReady, knowledgeError] = useKnowledge(
+    fs,
+    user,
+    id
+  );
 
-  if (!knowledgeReady) {
+  if (!userReady || !knowledgeReady) {
     return <LoadingScreen />;
   }
 
-  if (knowledgeError) {
-    return <ErrorScreen error={knowledgeError} />;
+  if (!user) {
+    return <LoginScreen />;
+  }
+
+  const error = userError || knowledgeError;
+  if (error) {
+    return <ErrorScreen error={error} />;
   }
 
   if (!knowledge) {

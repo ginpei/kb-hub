@@ -90,6 +90,7 @@ export function useLatestKnowledges(
 
 export function useKnowledge(
   fs: firebase.firestore.Firestore,
+  user: firebase.User | null,
   id: string
 ): [Knowledge | null, boolean, Error | null] {
   const [knowledge, setKnowledge] = useState<Knowledge | null>(null);
@@ -97,6 +98,16 @@ export function useKnowledge(
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
+    setKnowledge(null);
+    setError(null);
+
+    if (!user) {
+      setReady(true);
+      return noop;
+    }
+
+    setReady(false);
+
     const doc = getCollection(fs).doc(id);
     return doc.onSnapshot(
       (ss) => {
@@ -115,7 +126,7 @@ export function useKnowledge(
         setError(e);
       }
     );
-  }, [fs, id]);
+  }, [fs, user, id]);
 
   return [knowledge, ready, error];
 }

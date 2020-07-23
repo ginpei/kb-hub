@@ -4,7 +4,7 @@ import { Route, Router, Switch } from "react-router-dom";
 import "./middleware/firebase";
 import { HomePage } from "./screens/HomePage";
 import { LoginPage } from "./screens/LoginPage";
-import { NotFoundPage } from "./screens/NotFoundPage";
+import { NotFoundScreen } from "./screens/NotFoundScreen";
 
 const appHistory = createBrowserHistory();
 
@@ -14,7 +14,7 @@ const App: React.FC = () => {
       <Switch>
         <Route exact={true} path="/" component={HomePage} />
         <Route exact={true} path="/login" component={LoginPage} />
-        <Route component={NotFoundPage} />
+        <Route component={NotFoundScreen} />
       </Switch>
     </Router>
   );

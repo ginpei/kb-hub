@@ -1,15 +1,20 @@
+import firebase from "firebase/app";
 import React, { useCallback, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { BasicLayout } from "../../composites/BasicLayout";
 import {
   createKnowledge,
   Knowledge,
   knowledgePath,
+  saveKnowledge,
 } from "../../models/Knowledge";
 import { KBEditForm } from "../../stables/KBEditForm";
 
+const fs = firebase.firestore();
+
 export const KBNewPage: React.FC = () => {
   const [knowledge, setKnowledge] = useState(createKnowledge());
+  const history = useHistory();
 
   const onChange = useCallback(
     (values: Partial<Knowledge>) => {
@@ -18,8 +23,9 @@ export const KBNewPage: React.FC = () => {
     [knowledge]
   );
 
-  const onSubmit = useCallback(() => {
-    console.log("# knowledge", knowledge);
+  const onSubmit = useCallback(async () => {
+    const savedKnowledge = await saveKnowledge(fs, knowledge);
+    history.push(knowledgePath("view", savedKnowledge));
   }, [knowledge]);
 
   return (

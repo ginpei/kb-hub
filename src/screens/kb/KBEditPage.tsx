@@ -1,8 +1,13 @@
 import firebase from "firebase/app";
 import React, { useCallback, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import { BasicLayout } from "../../composites/BasicLayout";
-import { Knowledge, knowledgePath, useKnowledge } from "../../models/Knowledge";
+import {
+  Knowledge,
+  knowledgePath,
+  saveKnowledge,
+  useKnowledge,
+} from "../../models/Knowledge";
 import { KBEditForm } from "../../stables/KBEditForm";
 import { ErrorScreen } from "../ErrorScreen";
 import { LoadingScreen } from "../LoadingScreen";
@@ -34,6 +39,7 @@ const PageContent: React.FC<{ knowledge: Knowledge }> = ({
   knowledge: initial,
 }) => {
   const [knowledge, setKnowledge] = useState(initial);
+  const history = useHistory();
 
   const onChange = useCallback(
     (values: Partial<Knowledge>) => {
@@ -42,8 +48,9 @@ const PageContent: React.FC<{ knowledge: Knowledge }> = ({
     [knowledge]
   );
 
-  const onSubmit = useCallback(() => {
-    console.log("# knowledge", knowledge);
+  const onSubmit = useCallback(async () => {
+    await saveKnowledge(fs, knowledge);
+    history.push(knowledgePath("view", knowledge));
   }, [knowledge]);
 
   return (

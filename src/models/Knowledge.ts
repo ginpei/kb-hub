@@ -104,6 +104,25 @@ export function useKnowledge(
   return [knowledge, ready, error];
 }
 
+export async function saveKnowledge(
+  fs: firebase.firestore.Firestore,
+  knowledge: Knowledge
+): Promise<Knowledge> {
+  const coll = getCollection(fs);
+
+  if (knowledge.id) {
+    const doc = coll.doc(knowledge.id);
+    await doc.set(knowledge);
+    return knowledge;
+  }
+
+  const doc = await coll.add(knowledge);
+  return {
+    ...knowledge,
+    id: doc.id,
+  };
+}
+
 function getCollection(fs: firebase.firestore.Firestore) {
   return fs.collection("knowledges");
 }

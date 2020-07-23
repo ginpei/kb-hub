@@ -103,8 +103,12 @@ export function useKnowledge(
         setReady(true);
         setError(null);
 
-        const values = docToKnowledge(ss);
-        setKnowledge(values);
+        if (ss.exists) {
+          const values = docToKnowledge(ss);
+          setKnowledge(values);
+        } else {
+          setKnowledge(null);
+        }
       },
       (e) => {
         setReady(true);

@@ -24,7 +24,6 @@ module.exports = {
   rules: {
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-unused-vars": "off", // leave it to tsc
-    "@typescript-eslint/no-use-before-define": "off",
     "arrow-parens": ["error", "always"],
     "class-methods-use-this": "off",
     "import/extensions": ["error", "never"],
@@ -33,5 +32,6 @@ module.exports = {
       { devDependencies: ["**/*.test.{ts,tsx}"] },
     ],
     "import/prefer-default-export": "off",
+    "no-use-before-define": "off",
   },
 };

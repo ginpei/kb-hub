@@ -1,3 +1,4 @@
+import NiceMarkdown from "@ginpei/react-nice-markdown";
 import firebase from "firebase/app";
 import React from "react";
 import { Link, useParams } from "react-router-dom";
@@ -34,7 +35,7 @@ export const KBViewPage: React.FC = () => {
         {" | "}
         <Link to={knowledgePath("edit", knowledge)}>Edit</Link>
       </p>
-      <p>{knowledge.content}</p>
+      <NiceMarkdown content={knowledge.content} />
     </BasicLayout>
   );
 };

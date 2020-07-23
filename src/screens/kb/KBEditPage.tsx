@@ -1,3 +1,4 @@
+import NiceMarkdown from "@ginpei/react-nice-markdown";
 import firebase from "firebase/app";
 import React, { useCallback, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
@@ -67,6 +68,10 @@ const PageContent: React.FC<{ knowledge: Knowledge }> = ({
         onChange={onChange}
         onSubmit={onSubmit}
       />
+      <details>
+        <summary>Preview</summary>
+        <NiceMarkdown content={knowledge.content} />
+      </details>
     </BasicLayout>
   );
 };

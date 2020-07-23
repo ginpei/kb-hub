@@ -4,6 +4,8 @@ import React, { useCallback } from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { BasicLayout } from "../composites/BasicLayout";
 import { useUser } from "../misc/firebaseHooks";
+import { LoadingScreen } from "./LoadingScreen";
+import { ErrorScreen } from "./ErrorScreen";
 
 const auth = firebase.auth();
 
@@ -23,11 +25,11 @@ export const LoginPage: React.FC = () => {
   }, []);
 
   if (!userReady) {
-    return <div>...</div>;
+    return <LoadingScreen />;
   }
 
   if (userError) {
-    return <div>Error: {userError?.message || "Unknown"}</div>;
+    return <ErrorScreen error={userError} />;
   }
 
   if (user) {

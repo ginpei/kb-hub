@@ -1,8 +1,8 @@
-import React from 'react';
-import { HomePage } from './screens/HomePage';
+import React from "react";
+import { HomePage } from "./screens/HomePage";
 
-function App() {
+const App: React.FC = () => {
   return <HomePage />;
-}
+};
 
 export default App;

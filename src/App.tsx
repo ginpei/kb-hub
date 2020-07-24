@@ -7,6 +7,7 @@ import { KBIndexPage } from "./screens/kb/KBIndexPage";
 import { KBNewPage } from "./screens/kb/KBNewPage";
 import { KBViewPage } from "./screens/kb/KBViewPage";
 import { LoginScreen } from "./screens/LoginScreen";
+import { MyPage } from "./screens/MyPage";
 import { NotFoundScreen } from "./screens/NotFoundScreen";
 
 const App: React.FC = () => {
@@ -19,6 +20,7 @@ const App: React.FC = () => {
         <Route exact={true} path="/kb/:id" component={KBViewPage} />
         <Route exact={true} path="/kb/:id/edit" component={KBEditPage} />
         <Route exact={true} path="/login" component={LoginScreen} />
+        <Route exact={true} path="/my" component={MyPage} />
         <Route component={NotFoundScreen} />
       </Switch>
     </BrowserRouter>

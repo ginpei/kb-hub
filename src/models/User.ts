@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { DataRecord, createDataRecord } from "./DataRecord";
 import { noop } from "../misc/misc";
+import { createDataRecord, DataRecord, updateTimestamp } from "./DataRecord";
 
 export interface User extends DataRecord {
   name: string;
@@ -82,6 +82,27 @@ export function useCurrentUser(
   );
 
   return [user, ready && userReady, error || userError];
+}
+
+export async function saveUser(
+  fs: firebase.firestore.Firestore,
+  user: User
+): Promise<User> {
+  const coll = getCollection(fs);
+
+  const present = updateTimestamp(user);
+
+  if (present.id) {
+    const doc = coll.doc(present.id);
+    await doc.set(present);
+    return present;
+  }
+
+  const doc = await coll.add(present);
+  return {
+    ...present,
+    id: doc.id,
+  };
 }
 
 function getCollection(fs: firebase.firestore.Firestore) {

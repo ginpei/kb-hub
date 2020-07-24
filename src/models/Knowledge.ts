@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { noop } from "../misc/misc";
 import { createDataRecord, DataRecord, updateTimestamp } from "./DataRecord";
+import { User } from "./User";
 
 export interface Knowledge extends DataRecord {
   content: string;
@@ -51,7 +52,7 @@ export function knowledgePath(
 
 export function useLatestKnowledges(
   fs: firebase.firestore.Firestore,
-  user: firebase.User | null
+  user: User | null
 ): [Knowledge[], boolean, Error | null] {
   const [knowledges, setKnowledges] = useState<Knowledge[]>([]);
   const [ready, setReady] = useState(false);
@@ -90,7 +91,7 @@ export function useLatestKnowledges(
 
 export function useKnowledge(
   fs: firebase.firestore.Firestore,
-  user: firebase.User | null,
+  user: User | null,
   id: string
 ): [Knowledge | null, boolean, Error | null] {
   const [knowledge, setKnowledge] = useState<Knowledge | null>(null);

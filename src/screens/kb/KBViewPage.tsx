@@ -15,7 +15,7 @@ const fs = firebase.firestore();
 
 export const KBViewPage: React.FC = () => {
   const { id } = useParams();
-  const [user, userReady, userError] = useCurrentUser(auth);
+  const [user, userReady, userError] = useCurrentUser(auth, fs);
   const [knowledge, knowledgeReady, knowledgeError] = useKnowledge(
     fs,
     user,

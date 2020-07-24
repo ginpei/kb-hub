@@ -16,7 +16,7 @@ const auth = firebase.auth();
 const fs = firebase.firestore();
 
 export const KBIndexPage: React.FC = () => {
-  const [user, userReady, userError] = useCurrentUser(auth);
+  const [user, userReady, userError] = useCurrentUser(auth, fs);
   const [knowledges, knowledgesReady, knowledgesError] = useLatestKnowledges(
     fs,
     user
@@ -27,6 +27,7 @@ export const KBIndexPage: React.FC = () => {
   }
 
   if (!user) {
+    // Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
     return <LoginScreen />;
   }
 

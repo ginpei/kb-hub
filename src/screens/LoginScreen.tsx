@@ -8,6 +8,7 @@ import { ErrorScreen } from "./ErrorScreen";
 import { LoadingScreen } from "./LoadingScreen";
 
 const auth = firebase.auth();
+const fs = firebase.firestore();
 
 const uiConfig: firebaseui.auth.Config = {
   credentialHelper: firebaseui.auth.CredentialHelper.NONE, // disable AccountChooser.com
@@ -18,7 +19,7 @@ const uiConfig: firebaseui.auth.Config = {
 };
 
 export const LoginScreen: React.FC = () => {
-  const [user, userReady, userError] = useCurrentUser(auth);
+  const [user, userReady, userError] = useCurrentUser(auth, fs);
 
   const onLogOutClick = useCallback(async () => {
     await auth.signOut();

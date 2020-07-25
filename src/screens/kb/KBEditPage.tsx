@@ -2,7 +2,7 @@ import NiceMarkdown from "@ginpei/react-nice-markdown";
 import firebase from "firebase/app";
 import React, { useCallback, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
-import { BasicLayout } from "../../composites/BasicLayout";
+import { BasicLayout } from "../../layouts/BasicLayout";
 import {
   Knowledge,
   knowledgePath,

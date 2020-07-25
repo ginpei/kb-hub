@@ -1,7 +1,7 @@
 import firebase from "firebase/app";
 import React, { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
-import { BasicLayout } from "../composites/BasicLayout";
+import { BasicLayout } from "../layouts/BasicLayout";
 import { saveUser, useCurrentUser, User } from "../models/User";
 import { UserForm } from "../stables/UserForm";
 import { ErrorScreen } from "./ErrorScreen";

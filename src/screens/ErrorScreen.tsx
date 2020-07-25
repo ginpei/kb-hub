@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { BasicLayout } from "../composites/BasicLayout";
+import { BasicLayout } from "../layouts/BasicLayout";
 
 export const ErrorScreen: React.FC<{ error: unknown }> = ({ error }) => {
   const message = useMemo(() => {

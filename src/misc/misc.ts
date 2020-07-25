@@ -3,12 +3,10 @@ export const noop: () => void = () => {
 };
 
 /**
- * Join class names.
+ * Join class names ignoring not-string items.
  * @example
- * const a = 'AAA';
- * const c = null;
- * const className = jcn(a, 'BBB', c); // => "AAA BBB"
+ * jcn('A', undefined, true, 'Z'); => "A Z"
  */
-export function jcn(...names: string[]): string {
-  return names.filter((v) => v).join(" ");
+export function jcn(...names: unknown[]): string {
+  return names.filter((v) => typeof v === "string").join(" ");
 }

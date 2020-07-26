@@ -1,7 +1,7 @@
 import firebase from "firebase/app";
 import React, { useCallback, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { BasicLayout } from "../../layouts/BasicLayout";
+import { BasicLayout } from "../../composites/BasicLayout";
 import {
   createKnowledge,
   Knowledge,

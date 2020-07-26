@@ -2,7 +2,7 @@ import NiceMarkdown from "@ginpei/react-nice-markdown";
 import firebase from "firebase/app";
 import React from "react";
 import { Link, useParams } from "react-router-dom";
-import { BasicLayout } from "../../layouts/BasicLayout";
+import { BasicLayout } from "../../composites/BasicLayout";
 import { knowledgePath, useKnowledge } from "../../models/Knowledge";
 import { useCurrentUser } from "../../models/User";
 import { ErrorScreen } from "../ErrorScreen";

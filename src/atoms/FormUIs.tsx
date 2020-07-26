@@ -66,7 +66,7 @@ export const Radio: HtmlComponent<
 );
 
 export const Label: HtmlComponent<"label"> = ({ className, ...props }) => (
-  <label className={c([styles.Label, className])} role="label" {...props} />
+  <label className={c([styles.Label, className])} {...props} />
 );
 
 export const Select: HtmlComponent<"select", CommonFormInterface> = ({

@@ -1,4 +1,5 @@
 import React, { useCallback } from "react";
+import { Button, Input } from "../atoms/FormUIs";
 import { User } from "../models/User";
 
 export const UserForm: React.FC<{
@@ -28,7 +29,7 @@ export const UserForm: React.FC<{
       <p>
         <label>
           Name:
-          <input
+          <Input
             disabled={disabled}
             name="name"
             onChange={onTextChange}
@@ -38,7 +39,7 @@ export const UserForm: React.FC<{
         </label>
       </p>
       <p>
-        <button disabled={disabled}>Save</button>
+        <Button disabled={disabled}>Save</Button>
       </p>
     </form>
   );

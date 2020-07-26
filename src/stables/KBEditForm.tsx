@@ -1,4 +1,5 @@
 import React, { useCallback } from "react";
+import { Button, Input, Textarea } from "../atoms/FormUIs";
 import { Knowledge } from "../models/Knowledge";
 
 export const KBEditForm: React.FC<{
@@ -28,7 +29,7 @@ export const KBEditForm: React.FC<{
       <p>
         <label>
           Title:
-          <input
+          <Input
             disabled={disabled}
             name="title"
             onChange={onTextChange}
@@ -41,7 +42,7 @@ export const KBEditForm: React.FC<{
         <label>
           Content:
           <br />
-          <textarea
+          <Textarea
             disabled={disabled}
             name="content"
             onChange={onTextChange}
@@ -50,9 +51,9 @@ export const KBEditForm: React.FC<{
         </label>
       </p>
       <p>
-        <button disabled={disabled}>
+        <Button disabled={disabled}>
           {knowledge.id ? "Update" : "Create"}
-        </button>
+        </Button>
       </p>
     </form>
   );

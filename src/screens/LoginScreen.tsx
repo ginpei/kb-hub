@@ -2,6 +2,7 @@ import firebase from "firebase/app";
 import * as firebaseui from "firebaseui";
 import React, { useCallback } from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
+import { Button } from "../atoms/FormUIs";
 import { BasicLayout } from "../composites/BasicLayout";
 import { useCurrentUser } from "../models/User";
 import { ErrorScreen } from "./ErrorScreen";
@@ -38,7 +39,7 @@ export const LoginScreen: React.FC = () => {
       <BasicLayout title="Logout">
         <h1>✔ Logged in</h1>
         <p>
-          <button onClick={onLogOutClick}>Log out</button>
+          <Button onClick={onLogOutClick}>Log out</Button>
         </p>
       </BasicLayout>
     );

@@ -1,0 +1,9 @@
+@mixin form-ui {
+  font-size: 0.8rem;
+  height: 2.4em;
+  vertical-align: middle;
+
+  &[data-ambiguous='true'] {
+    box-shadow: 0 0 4px var(--color-theme-fg);
+  }
+}

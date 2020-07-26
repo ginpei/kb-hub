@@ -1,0 +1,98 @@
+@import './FormUIs-basic';
+
+.Button {
+  @include form-ui;
+  background-color: var(--color-button-bg);
+  border: solid 1px #0003;
+  border-radius: 0.2rem;
+  box-shadow: 0 0 1rem #0002 inset;
+  color: var(--color-button-fg);
+  cursor: pointer;
+  min-width: 3rem;
+  padding: 0.4em 2em;
+
+  &:hover,
+  &:focus {
+    background-color: var(--color-button-bg-hover);
+  }
+
+  &:disabled {
+    color: #999;
+  }
+
+  &[data-kind='primary'] {
+    background-color: var(--color-button-primary-bg);
+    color: var(--color-button-primary-fg);
+
+    &:hover,
+    &:focus {
+      background-color: var(--color-button-primary-bg-hover);
+    }
+  }
+}
+
+.Label {
+  & > input {
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+  }
+
+  & + & {
+    margin-left: 1em;
+  }
+}
+
+.Input:not([type='checkbox']):not([type='radio']) {
+  @include form-ui;
+
+  box-sizing: border-box;
+  border: solid 1px #0003;
+  border-radius: 0.2rem;
+  padding: 0.4em 0.4em;
+
+  &[type='color'] {
+    cursor: pointer;
+    padding-bottom: 0;
+    padding-top: 0;
+    width: 4em;
+  }
+
+  &[type='number'] {
+    text-align: right;
+    width: 4.5em;
+  }
+}
+
+.Input[type='checkbox'],
+.Input[type='radio'] {
+  cursor: pointer;
+
+  &[data-ambiguous='true'] {
+    border-color: var(--color-theme-fg); // TODO check if works
+  }
+}
+
+// label
+.Checkbox,
+.Radio {
+  cursor: pointer;
+
+  input {
+    height: 1em;
+  }
+
+  &:hover input {
+    transform: scale(1.2);
+  }
+}
+
+.Select {
+  @include form-ui;
+  border: solid 1px #0003;
+  border-radius: 0.2rem;
+  padding: 0.34em 0.4em;
+}
+
+.Textarea {
+  @include form-ui;
+}

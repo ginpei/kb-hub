@@ -1,3 +1,11 @@
+import { ElementType } from "react";
+
+export type HtmlProps<T extends ElementType> = React.ComponentPropsWithRef<T>;
+
+export type HtmlComponent<T extends ElementType, U = unknown> = React.FC<
+  HtmlProps<T> & U
+>;
+
 export const noop: () => void = () => {
   /* void */
 };

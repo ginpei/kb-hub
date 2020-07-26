@@ -1,17 +1,45 @@
-import React from "react";
-import { Link, useParams } from "react-router-dom";
+import firebase from "firebase/app";
+import React, { useCallback, useState } from "react";
+import { Link, useHistory } from "react-router-dom";
 import { BasicLayout } from "../../composites/BasicLayout";
-import { groupPath } from "../../models/Group";
+import { Group, groupPath, saveGroup } from "../../models/Group";
+import { GroupForm } from "../../stables/GroupForm";
+import { provideGroupPage, useGroupPageContext } from "./GroupPageContext";
 
-export const GroupEditPage: React.FC = () => {
-  const { id } = useParams();
+const fs = firebase.firestore();
+
+export const GroupEditPage: React.FC = provideGroupPage(() => {
+  const initial = useGroupPageContext();
+  const [group, setGroup] = useState(initial);
+  const [saving, setSaving] = useState(false);
+  const history = useHistory();
+
+  const onChange = useCallback(
+    (values: Partial<Group>) => {
+      setGroup({ ...group, ...values });
+    },
+    [group]
+  );
+
+  const onSubmit = useCallback(async () => {
+    setSaving(true);
+    const savedGroup = await saveGroup(fs, group);
+    setSaving(false);
+    history.push(groupPath("view", savedGroup));
+  }, [group, history]);
 
   return (
-    <BasicLayout title={`Edit ${id}`}>
-      <h1>Edit</h1>
+    <BasicLayout title={`Edit ${initial.name}`}>
+      <h1>Edit {initial.name}</h1>
       <p>
-        <Link to={groupPath("view", id)}>Back</Link>
+        <Link to={groupPath("view", initial)}>Back</Link>
       </p>
+      <GroupForm
+        disabled={saving}
+        group={group}
+        onChange={onChange}
+        onSubmit={onSubmit}
+      />
     </BasicLayout>
   );
-};
+});

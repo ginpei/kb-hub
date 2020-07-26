@@ -16,8 +16,8 @@ const fs = firebase.firestore();
 
 const App: React.FC = () => {
   return (
-    <CurrentUserProvider auth={auth} fs={fs}>
-      <BrowserRouter>
+    <BrowserRouter>
+      <CurrentUserProvider auth={auth} fs={fs}>
         <Switch>
           <Route exact={true} path="/" component={HomePage} />
           <Route exact={true} path="/kb" component={KBIndexPage} />
@@ -28,8 +28,8 @@ const App: React.FC = () => {
           <Route exact={true} path="/my" component={MyPage} />
           <Route component={NotFoundScreen} />
         </Switch>
-      </BrowserRouter>
-    </CurrentUserProvider>
+      </CurrentUserProvider>
+    </BrowserRouter>
   );
 };
 

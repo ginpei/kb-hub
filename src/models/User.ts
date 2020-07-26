@@ -105,11 +105,7 @@ export async function saveUser(
   };
 }
 
-function getCollection(fs: firebase.firestore.Firestore) {
-  return fs.collection("users");
-}
-
-function ssToUser(
+export function ssToUser(
   ss: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>
 ): User {
   const data = ss.data();
@@ -118,4 +114,8 @@ function ssToUser(
     id: ss.id,
   };
   return knowledge;
+}
+
+function getCollection(fs: firebase.firestore.Firestore) {
+  return fs.collection("users");
 }

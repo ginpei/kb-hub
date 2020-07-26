@@ -12,6 +12,7 @@ import { KBViewPage } from "./screens/kb/KBViewPage";
 import { LoginScreen } from "./screens/LoginScreen";
 import { MyPage } from "./screens/MyPage";
 import { NotFoundScreen } from "./screens/NotFoundScreen";
+import { GroupUserManagementPage } from "./screens/groups/GroupUserManagementPage.tsx";
 
 export const Routings: React.FC = () => (
   <Switch>
@@ -20,6 +21,11 @@ export const Routings: React.FC = () => (
     <Route exact={true} path="/groups/new" component={NewGroupPage} />
     <Route exact={true} path="/groups/:id" component={GroupViewPage} />
     <Route exact={true} path="/groups/:id/edit" component={GroupEditPage} />
+    <Route
+      exact={true}
+      path="/groups/:id/users/manage"
+      component={GroupUserManagementPage}
+    />
     <Route exact={true} path="/kb" component={KBIndexPage} />
     <Route exact={true} path="/kb/new" component={KBNewPage} />
     <Route exact={true} path="/kb/:id" component={KBViewPage} />

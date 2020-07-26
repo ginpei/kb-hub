@@ -1,20 +1,23 @@
 import { useEffect, useState } from "react";
 import { noop } from "../misc/misc";
 import { createDataRecord, DataRecord, updateTimestamp } from "./DataRecord";
+import { GroupUser } from "./GroupUser";
 import { User } from "./User";
 
 export interface Group extends DataRecord {
   name: string;
+  users: GroupUser[];
 }
 
 type independentPathType = "index" | "new";
 
-type pathType = "view" | "edit";
+type pathType = "view" | "edit" | "manageUsers";
 
 export function createGroup(initial?: Partial<Group>): Group {
   return {
     ...createDataRecord(),
     name: "",
+    users: [],
     ...initial,
   };
 }

@@ -1,3 +1,5 @@
+import "./middleware/firebase"; // import before any use
+
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";

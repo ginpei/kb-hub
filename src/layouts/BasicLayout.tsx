@@ -3,9 +3,14 @@ import { Link } from "react-router-dom";
 import { jcn } from "../misc/misc";
 import styles from "./BasicLayout.module.scss";
 
-export const BasicLayout: React.FC<{
+export type BasicLayoutProps = {
   title?: string;
-}> = ({ children, title }) => {
+};
+
+export const BasicLayout: React.FC<BasicLayoutProps> = ({
+  children,
+  title,
+}) => {
   useEffect(() => {
     const baseTitle = "Knowledge Base Hub";
     const fullTitle = title ? `${title} - ${baseTitle}` : baseTitle;

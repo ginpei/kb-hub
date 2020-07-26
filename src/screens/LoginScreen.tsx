@@ -2,7 +2,7 @@ import firebase from "firebase/app";
 import * as firebaseui from "firebaseui";
 import React, { useCallback } from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import { Button } from "../atoms/FormUIs";
+import { Button } from "../atoms/FormBaseUis";
 import { BasicLayout } from "../composites/BasicLayout";
 import { useCurrentUser } from "../models/User";
 import { ErrorScreen } from "./ErrorScreen";

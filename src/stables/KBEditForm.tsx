@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Button, Input, Textarea } from "../atoms/FormUIs";
+import { Button, Input, Textarea } from "../atoms/FormBaseUis";
 import { Knowledge } from "../models/Knowledge";
 
 export const KBEditForm: React.FC<{

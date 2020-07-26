@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Button, Input } from "../atoms/FormUIs";
+import { Button, Input } from "../atoms/FormBaseUis";
 import { Group } from "../models/Group";
 
 export const GroupForm: React.FC<{

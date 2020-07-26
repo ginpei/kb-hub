@@ -72,20 +72,6 @@
   }
 }
 
-// label
-.Checkbox,
-.Radio {
-  cursor: pointer;
-
-  input {
-    height: 1em;
-  }
-
-  &:hover input {
-    transform: scale(1.2);
-  }
-}
-
 .Select {
   @include form-ui;
   border: solid 1px #0003;

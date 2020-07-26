@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
-import { HtmlComponent } from "../misc/misc";
-import styles from "./FormUIs.module.scss";
+import { HtmlComponent, jcn } from "../misc/misc";
+import styles from "./FormBaseUis.module.scss";
 
 interface CommonFormInterface {
   ambiguous?: boolean;
@@ -40,33 +40,8 @@ export const Input: HtmlComponent<"input", CommonFormInterface> = (props) => {
   );
 };
 
-export const Checkbox: HtmlComponent<
-  "input",
-  {
-    label: string;
-  }
-> = ({ label, type, ...inputProps }) => (
-  <Label className={styles.Checkbox}>
-    <Input type="checkbox" {...inputProps} />
-    {label}
-  </Label>
-);
-
-export const Radio: HtmlComponent<
-  "input",
-  {
-    label: string;
-    name: string;
-  }
-> = ({ label, type, ...inputProps }) => (
-  <Label className={styles.Radio} data-hoge={styles.Radio}>
-    <Input type="radio" {...inputProps} />
-    {label}
-  </Label>
-);
-
 export const Label: HtmlComponent<"label"> = ({ className, ...props }) => (
-  <label className={c([styles.Label, className])} {...props} />
+  <label className={jcn(styles.Label, className)} {...props} />
 );
 
 export const Select: HtmlComponent<"select", CommonFormInterface> = ({
@@ -101,7 +76,7 @@ export const Textarea: HtmlComponent<"textarea", CommonFormInterface> = ({
 
   return (
     <textarea
-      className={c([styles.Textarea, className])}
+      className={jcn(styles.Textarea, className)}
       data-ambiguous={ambiguous}
       onFocus={onFocus}
       value={value || ""}
@@ -109,10 +84,3 @@ export const Textarea: HtmlComponent<"textarea", CommonFormInterface> = ({
     />
   );
 };
-
-/**
- * Combine class names into one string.
- */
-function c(classNames: (string | undefined | null)[]) {
-  return classNames.filter((v) => v).join(" ");
-}

@@ -31,9 +31,9 @@ const GroupPageContext = createContext(createGroup());
  */
 export function provideGroupPage(Component: React.FC): React.FC {
   return () => {
-    const { id } = useParams();
+    const { id, groupId } = useParams();
     const [user, userReady, userError] = useCurrentUser(auth, fs);
-    const [group, groupReady, groupError] = useGroup(fs, user, id);
+    const [group, groupReady, groupError] = useGroup(fs, user, groupId || id);
 
     if (!userReady || !groupReady) {
       return <LoadingScreen />;

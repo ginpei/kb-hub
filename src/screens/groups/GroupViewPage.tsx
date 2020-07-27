@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { BasicLayout } from "../../composites/BasicLayout";
 import { groupPath } from "../../models/Group";
 import { groupUserPath } from "../../models/GroupUser";
-import { useLatestKnowledges } from "../../models/Knowledge";
+import { useLatestKnowledges, knowledgePath } from "../../models/Knowledge";
 import { ErrorScreen } from "../ErrorScreen";
 import { LoadingScreen } from "../LoadingScreen";
 import { provideGroupPage, useGroupPageContext } from "./GroupPageContext";
@@ -38,7 +38,11 @@ export const GroupViewPage: React.FC = provideGroupPage(() => {
       </p>
       <ul>
         {knowledges.map((knowledge) => (
-          <li key={knowledge.id}>{knowledge.title}</li>
+          <li key={knowledge.id}>
+            <Link to={knowledgePath("view", group, knowledge)}>
+              {knowledge.title}
+            </Link>
+          </li>
         ))}
       </ul>
     </BasicLayout>

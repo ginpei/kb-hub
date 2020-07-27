@@ -23,13 +23,22 @@ export function createKnowledge(initial?: Partial<Knowledge>): Knowledge {
   };
 }
 
-export function knowledgePath(type: independentPathType): string;
-export function knowledgePath(type: pathType, knowledge: Knowledge): string;
+export function knowledgePath(
+  type: independentPathType,
+  group: Group | string
+): string;
+export function knowledgePath(
+  type: pathType,
+  group: Group | string,
+  knowledge: Knowledge
+): string;
 export function knowledgePath(
   type: independentPathType | pathType,
+  group: Group | string,
   knowledge?: Knowledge
 ): string {
-  const index = "/kb";
+  const gid = typeof group === "string" ? group : group.id;
+  const index = `/groups/${gid}/kb`;
 
   if (type === "index") {
     return index;
@@ -135,8 +144,8 @@ export function useKnowledge(
 
 export async function saveKnowledge(
   fs: firebase.firestore.Firestore,
-  knowledge: Knowledge,
-  group: Group | string
+  group: Group | string,
+  knowledge: Knowledge
 ): Promise<Knowledge> {
   const coll = getKnowledgeCollection(fs, group);
 

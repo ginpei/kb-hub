@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { noop } from "../misc/misc";
 import { createDataRecord, DataRecord, updateTimestamp } from "./DataRecord";
-import { User } from "./User";
+import { createGroup, getGroupCollection, Group } from "./Group";
 
 export interface Knowledge extends DataRecord {
   content: string;
+  group: Group;
   title: string;
 }
 
@@ -16,6 +17,7 @@ export function createKnowledge(initial?: Partial<Knowledge>): Knowledge {
   return {
     ...createDataRecord(),
     content: "",
+    group: createGroup(),
     title: "",
     ...initial,
   };
@@ -52,7 +54,7 @@ export function knowledgePath(
 
 export function useLatestKnowledges(
   fs: firebase.firestore.Firestore,
-  user: User | null
+  group: Group | null
 ): [Knowledge[], boolean, Error | null] {
   const [knowledges, setKnowledges] = useState<Knowledge[]>([]);
   const [ready, setReady] = useState(false);
@@ -62,15 +64,14 @@ export function useLatestKnowledges(
     setKnowledges([]);
     setError(null);
 
-    if (!user) {
+    if (!group) {
       setReady(true);
       return noop;
     }
 
     setReady(false);
 
-    // TODO get items for user
-    const coll = getCollection(fs).orderBy("updatedAt", "desc");
+    const coll = getKnowledgeCollection(fs, group).orderBy("updatedAt", "desc");
     return coll.onSnapshot(
       (ss) => {
         setReady(true);
@@ -84,14 +85,14 @@ export function useLatestKnowledges(
         setError(e);
       }
     );
-  }, [fs, user]);
+  }, [fs, group]);
 
   return [knowledges, ready, error];
 }
 
 export function useKnowledge(
   fs: firebase.firestore.Firestore,
-  user: User | null,
+  group: Group | string | null,
   id: string
 ): [Knowledge | null, boolean, Error | null] {
   const [knowledge, setKnowledge] = useState<Knowledge | null>(null);
@@ -102,14 +103,14 @@ export function useKnowledge(
     setKnowledge(null);
     setError(null);
 
-    if (!user) {
+    if (!group) {
       setReady(true);
       return noop;
     }
 
     setReady(false);
 
-    const doc = getCollection(fs).doc(id);
+    const doc = getKnowledgeCollection(fs, group).doc(id);
     return doc.onSnapshot(
       (ss) => {
         setReady(true);
@@ -127,16 +128,17 @@ export function useKnowledge(
         setError(e);
       }
     );
-  }, [fs, user, id]);
+  }, [fs, group, id]);
 
   return [knowledge, ready, error];
 }
 
 export async function saveKnowledge(
   fs: firebase.firestore.Firestore,
-  knowledge: Knowledge
+  knowledge: Knowledge,
+  group: Group | string
 ): Promise<Knowledge> {
-  const coll = getCollection(fs);
+  const coll = getKnowledgeCollection(fs, group);
 
   const present = updateTimestamp(knowledge);
 
@@ -153,8 +155,12 @@ export async function saveKnowledge(
   };
 }
 
-function getCollection(fs: firebase.firestore.Firestore) {
-  return fs.collection("knowledges");
+function getKnowledgeCollection(
+  fs: firebase.firestore.Firestore,
+  group: Group | string
+) {
+  const gid = typeof group === "string" ? group : group.id;
+  return getGroupCollection(fs).doc(gid).collection("knowledges");
 }
 
 function docToKnowledge(

@@ -13,6 +13,9 @@ import { KBEditForm } from "../../stables/KBEditForm";
 const fs = firebase.firestore();
 
 export const KBNewPage: React.FC = () => {
+  // TODO move to under group
+  return null;
+  /*
   const [knowledge, setKnowledge] = useState(createKnowledge());
   const [saving, setSaving] = useState(false);
   const history = useHistory();
@@ -45,4 +48,5 @@ export const KBNewPage: React.FC = () => {
       />
     </BasicLayout>
   );
+  */
 };

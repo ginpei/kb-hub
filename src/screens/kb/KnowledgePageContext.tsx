@@ -1,18 +1,17 @@
 import firebase from "firebase/app";
 import React, { createContext, useContext } from "react";
 import { useParams } from "react-router-dom";
+import { useCurrentUserContext } from "../../models/CurrentUserProvider";
+import { useGroup } from "../../models/Group";
 import {
   createKnowledge,
   Knowledge,
   useKnowledge,
 } from "../../models/Knowledge";
-import { useCurrentUser } from "../../models/User";
 import { ErrorScreen } from "../ErrorScreen";
 import { LoadingScreen } from "../LoadingScreen";
-import { LoginScreen } from "../LoginScreen";
 import { NotFoundScreen } from "../NotFoundScreen";
 
-const auth = firebase.auth();
 const fs = firebase.firestore();
 
 const KnowledgePageContext = createContext(createKnowledge());
@@ -36,27 +35,24 @@ const KnowledgePageContext = createContext(createKnowledge());
 export function provideKnowledgePage(Component: React.FC): React.FC {
   return () => {
     const { id } = useParams();
-    const [user, userReady, userError] = useCurrentUser(auth, fs);
+    const user = useCurrentUserContext();
+    const [group, groupReady, groupError] = useGroup(fs, user, id);
     const [knowledge, knowledgeReady, knowledgeError] = useKnowledge(
       fs,
-      user,
+      group,
       id
     );
 
-    if (!userReady || !knowledgeReady) {
+    if (!groupReady || !knowledgeReady) {
       return <LoadingScreen />;
     }
 
-    if (!user) {
-      return <LoginScreen />;
-    }
-
-    const error = userError || knowledgeError;
+    const error = groupError || knowledgeError;
     if (error) {
       return <ErrorScreen error={error} />;
     }
 
-    if (!knowledge) {
+    if (!group || !knowledge) {
       return <NotFoundScreen />;
     }
 

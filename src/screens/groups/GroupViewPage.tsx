@@ -1,12 +1,30 @@
+import firebase from "firebase/app";
 import React from "react";
 import { Link } from "react-router-dom";
 import { BasicLayout } from "../../composites/BasicLayout";
 import { groupPath } from "../../models/Group";
-import { provideGroupPage, useGroupPageContext } from "./GroupPageContext";
 import { groupUserPath } from "../../models/GroupUser";
+import { useLatestKnowledges } from "../../models/Knowledge";
+import { ErrorScreen } from "../ErrorScreen";
+import { LoadingScreen } from "../LoadingScreen";
+import { provideGroupPage, useGroupPageContext } from "./GroupPageContext";
+
+const fs = firebase.firestore();
 
 export const GroupViewPage: React.FC = provideGroupPage(() => {
   const group = useGroupPageContext();
+  const [knowledges, knowledgesReady, knowledgesError] = useLatestKnowledges(
+    fs,
+    group
+  );
+
+  if (!knowledgesReady) {
+    return <LoadingScreen />;
+  }
+
+  if (knowledgesError) {
+    return <ErrorScreen error={knowledgesError} />;
+  }
 
   return (
     <BasicLayout title={group.name}>
@@ -18,6 +36,11 @@ export const GroupViewPage: React.FC = provideGroupPage(() => {
         {" | "}
         <Link to={groupUserPath(group, "manage")}>Manage users</Link>
       </p>
+      <ul>
+        {knowledges.map((knowledge) => (
+          <li key={knowledge.id}>{knowledge.title}</li>
+        ))}
+      </ul>
     </BasicLayout>
   );
 });

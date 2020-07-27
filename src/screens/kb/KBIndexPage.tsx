@@ -16,6 +16,9 @@ const auth = firebase.auth();
 const fs = firebase.firestore();
 
 export const KBIndexPage: React.FC = () => {
+  // TODO move to under group
+  return null;
+  /*
   const [user, userReady, userError] = useCurrentUser(auth, fs);
   const [knowledges, knowledgesReady, knowledgesError] = useLatestKnowledges(
     fs,
@@ -47,6 +50,7 @@ export const KBIndexPage: React.FC = () => {
       ))}
     </BasicLayout>
   );
+  */
 };
 
 const KBItem: React.FC<{ knowledge: Knowledge }> = ({ knowledge }) => {

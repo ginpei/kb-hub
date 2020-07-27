@@ -10,7 +10,7 @@ service cloud.firestore {
     match /groups/{gid}/users/{id} {
       allow read, write: if request.auth.uid != null;
     }
-    match /knowledges/{id} {
+    match /groups/{gid}/knowledges/{id} {
       allow read, write: if request.auth.uid != null;
     }
     match /users/{id} {

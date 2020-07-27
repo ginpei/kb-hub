@@ -73,7 +73,7 @@ export function useLatestGroups(
     setReady(false);
 
     // TODO get items for user
-    const coll = getCollection(fs).orderBy("updatedAt", "desc");
+    const coll = getGroupCollection(fs).orderBy("updatedAt", "desc");
     return coll.onSnapshot(
       (ss) => {
         setReady(true);
@@ -112,7 +112,7 @@ export function useGroup(
 
     setReady(false);
 
-    const doc = getCollection(fs).doc(id);
+    const doc = getGroupCollection(fs).doc(id);
     return doc.onSnapshot(
       (ss) => {
         setReady(true);
@@ -139,7 +139,7 @@ export async function saveGroup(
   fs: firebase.firestore.Firestore,
   group: Group
 ): Promise<Group> {
-  const coll = getCollection(fs);
+  const coll = getGroupCollection(fs);
 
   const present = updateTimestamp(group);
 
@@ -156,8 +156,17 @@ export async function saveGroup(
   };
 }
 
-function getCollection(fs: firebase.firestore.Firestore) {
+export function getGroupCollection(
+  fs: firebase.firestore.Firestore
+): firebase.firestore.CollectionReference<firebase.firestore.DocumentData> {
   return fs.collection("groups");
+}
+
+export function getGroupDoc(
+  fs: firebase.firestore.Firestore,
+  group: Group
+): firebase.firestore.DocumentReference<firebase.firestore.DocumentData> {
+  return getGroupCollection(fs).doc(group.id);
 }
 
 function docToGroup(

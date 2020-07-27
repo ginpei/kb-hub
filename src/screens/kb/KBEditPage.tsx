@@ -17,6 +17,9 @@ import {
 const fs = firebase.firestore();
 
 export const KBEditPage: React.FC = provideKnowledgePage(() => {
+  // TODO move to under group
+  return null;
+  /*
   const initial = useKnowledgePageContext();
   const [knowledge, setKnowledge] = useState(initial);
   const [saving, setSaving] = useState(false);
@@ -54,4 +57,5 @@ export const KBEditPage: React.FC = provideKnowledgePage(() => {
       </details>
     </BasicLayout>
   );
+  */
 });

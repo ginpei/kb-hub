@@ -9,7 +9,7 @@ export interface Group extends DataRecord {
 
 type independentPathType = "index" | "new";
 
-type pathType = "view" | "edit" | "manageUsers";
+type pathType = "view" | "edit" | "users";
 
 export function createGroup(initial?: Partial<Group>): Group {
   return {
@@ -45,6 +45,10 @@ export function groupPath(
 
   if (type === "edit") {
     return `${view}/edit`;
+  }
+
+  if (type === "users") {
+    return `${view}/users`;
   }
 
   throw new Error(`Unknown path type "${type}"`);
@@ -166,6 +170,7 @@ export function getGroupDoc(
   return getGroupCollection(fs).doc(group.id);
 }
 
+// TODO rename to ssToGroup
 export function docToGroup(
   ss: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>
 ): Group {

@@ -32,6 +32,8 @@ export const GroupViewPage: React.FC = provideGroupPage(() => {
         <Link to={groupPath("index")}>Back</Link>
         {" | "}
         <Link to={groupPath("edit", group)}>Edit</Link>
+        {" | "}
+        <Link to={groupPath("users", group)}>Users</Link>
       </p>
       <ul>
         {knowledges.map((knowledge) => (

@@ -2,23 +2,17 @@ import firebase from "firebase/app";
 import React from "react";
 import { Link } from "react-router-dom";
 import { BasicLayout } from "../../composites/BasicLayout";
-import { useCurrentUserContext } from "../../models/CurrentUserProvider";
 import { groupPath } from "../../models/Group";
+import { privilegeToLabel, useGroupUsers } from "../../models/GroupUser";
 import { ErrorScreen } from "../ErrorScreen";
 import { LoadingScreen } from "../LoadingScreen";
 import { provideGroupPage, useGroupPageContext } from "./GroupPageContext";
 
 const fs = firebase.firestore();
 
-export const GroupUserManagementPage: React.FC = () => {
-  throw new Error("WIP");
-};
-
-/*
 export const GroupUserManagementPage: React.FC = provideGroupPage(() => {
   const group = useGroupPageContext();
-  const user = useCurrentUserContext();
-  const [users, usersReady, usersError] = useAllGroupUsers(fs, user, group);
+  const [users, usersReady, usersError] = useGroupUsers(fs, group);
 
   if (!usersReady) {
     return <LoadingScreen />;
@@ -42,7 +36,7 @@ export const GroupUserManagementPage: React.FC = provideGroupPage(() => {
             <small style={{ color: "var(--color-moderate)" }}>
               {"Privileges: "}
               {gUser.privileges
-                .map((privilege) => privilegeToString(privilege))
+                .map((privilege) => privilegeToLabel(privilege))
                 .join(", ")}
             </small>
           </li>
@@ -51,4 +45,3 @@ export const GroupUserManagementPage: React.FC = provideGroupPage(() => {
     </BasicLayout>
   );
 });
-*/

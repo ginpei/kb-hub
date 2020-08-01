@@ -23,7 +23,7 @@ export const Routings: React.FC = () => (
     <Route exact={true} path="/groups/:id/edit" component={GroupEditPage} />
     <Route
       exact={true}
-      path="/groups/:id/users/manage"
+      path="/groups/:id/users"
       component={GroupUserManagementPage}
     />
     <Route exact={true} path="/groups/:groupId/kb" component={KBIndexPage} />

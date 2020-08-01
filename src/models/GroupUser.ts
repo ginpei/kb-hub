@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createDataRecord, DataRecord } from "./DataRecord";
-import { createGroup, docToGroup, Group } from "./Group";
-import { createUser, getUserDoc, User } from "./User";
+import { createGroup, docToGroup, Group, getGroupDoc } from "./Group";
+import { createUser, getUserDoc, User, ssToUser } from "./User";
 
 export interface GroupUser extends DataRecord {
   group: Group;
@@ -16,6 +16,11 @@ export type RawGroupUser = Omit<GroupUser, "group" | "user"> & {
 
 type GroupUserPrivilege = "login" | "userManagement";
 
+const privilegeLabels: Record<GroupUserPrivilege, string> = {
+  login: "Login",
+  userManagement: "User management",
+};
+
 export function createGroupUser(initial?: Partial<GroupUser>): GroupUser {
   return {
     ...createDataRecord(),
@@ -26,6 +31,9 @@ export function createGroupUser(initial?: Partial<GroupUser>): GroupUser {
   };
 }
 
+/**
+ * Returns all groups where the specified user belongs to.
+ */
 export function useUserGroups(
   fs: firebase.firestore.Firestore,
   user: User | null
@@ -64,6 +72,45 @@ export function useUserGroups(
   return [groups, ready, error];
 }
 
+/**
+ * Returns all users who belong to the specified group.
+ */
+export function useGroupUsers(
+  fs: firebase.firestore.Firestore,
+  group: Group
+): [GroupUser[], boolean, Error | null] {
+  const [users, setUsers] = useState<GroupUser[]>([]);
+  const [ready, setReady] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    setUsers([]);
+    setError(null);
+    setReady(false);
+
+    const docGroup = getGroupDoc(fs, group);
+    const coll = getCollection(fs).where("group", "==", docGroup);
+    coll
+      .get()
+      .then((ss) => Promise.all(ss.docs.map((v) => docToResolvedGroupUser(v))))
+      .then((newUsers) => {
+        setUsers(newUsers);
+      })
+      .catch((e) => setError(e))
+      .finally(() => setReady(true));
+  }, [fs, group]);
+
+  return [users, ready, error];
+}
+
+export function privilegeToLabel(privilege: GroupUserPrivilege): string {
+  const label = privilegeLabels[privilege];
+  if (!label) {
+    throw new Error(`Unknown privilege "${privilege}"`);
+  }
+  return label;
+}
+
 function getCollection(fs: firebase.firestore.Firestore) {
   return fs.collection("groupUsers");
 }
@@ -81,6 +128,23 @@ function docToRawGroupUser(
     group: data.group,
     id: ss.id,
     user: data.user,
+  };
+  return groupUser;
+}
+
+async function docToResolvedGroupUser(
+  ss: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>
+): Promise<GroupUser> {
+  const raw = docToRawGroupUser(ss);
+  const [ssGroup, ssUser] = await Promise.all([
+    raw.group.get(),
+    raw.user.get(),
+  ]);
+
+  const groupUser: GroupUser = {
+    ...raw,
+    group: docToGroup(ssGroup),
+    user: ssToUser(ssUser),
   };
   return groupUser;
 }

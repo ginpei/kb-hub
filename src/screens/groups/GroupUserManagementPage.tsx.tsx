@@ -4,13 +4,17 @@ import { Link } from "react-router-dom";
 import { BasicLayout } from "../../composites/BasicLayout";
 import { useCurrentUserContext } from "../../models/CurrentUserProvider";
 import { groupPath } from "../../models/Group";
-import { useAllGroupUsers, privilegeToString } from "../../models/GroupUser";
 import { ErrorScreen } from "../ErrorScreen";
 import { LoadingScreen } from "../LoadingScreen";
 import { provideGroupPage, useGroupPageContext } from "./GroupPageContext";
 
 const fs = firebase.firestore();
 
+export const GroupUserManagementPage: React.FC = () => {
+  throw new Error("WIP");
+};
+
+/*
 export const GroupUserManagementPage: React.FC = provideGroupPage(() => {
   const group = useGroupPageContext();
   const user = useCurrentUserContext();
@@ -47,3 +51,4 @@ export const GroupUserManagementPage: React.FC = provideGroupPage(() => {
     </BasicLayout>
   );
 });
+*/

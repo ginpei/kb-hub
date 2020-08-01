@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { noop } from "../misc/misc";
 import { createDataRecord, DataRecord, updateTimestamp } from "./DataRecord";
-import { GroupUser } from "./GroupUser";
 import { User } from "./User";
 
 export interface Group extends DataRecord {
   name: string;
-  users: GroupUser[];
 }
 
 type independentPathType = "index" | "new";
@@ -17,7 +15,6 @@ export function createGroup(initial?: Partial<Group>): Group {
   return {
     ...createDataRecord(),
     name: "",
-    users: [],
     ...initial,
   };
 }
@@ -169,7 +166,7 @@ export function getGroupDoc(
   return getGroupCollection(fs).doc(group.id);
 }
 
-function docToGroup(
+export function docToGroup(
   ss: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>
 ): Group {
   const data = ss.data();

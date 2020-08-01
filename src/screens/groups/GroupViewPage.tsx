@@ -3,7 +3,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { BasicLayout } from "../../composites/BasicLayout";
 import { groupPath } from "../../models/Group";
-import { groupUserPath } from "../../models/GroupUser";
 import { useLatestKnowledges, knowledgePath } from "../../models/Knowledge";
 import { ErrorScreen } from "../ErrorScreen";
 import { LoadingScreen } from "../LoadingScreen";
@@ -33,8 +32,6 @@ export const GroupViewPage: React.FC = provideGroupPage(() => {
         <Link to={groupPath("index")}>Back</Link>
         {" | "}
         <Link to={groupPath("edit", group)}>Edit</Link>
-        {" | "}
-        <Link to={groupUserPath(group, "manage")}>Manage users</Link>
       </p>
       <ul>
         {knowledges.map((knowledge) => (

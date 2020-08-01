@@ -105,6 +105,14 @@ export async function saveUser(
   };
 }
 
+export function getUserDoc(
+  fs: firebase.firestore.Firestore,
+  user: User | string
+): firebase.firestore.DocumentReference<firebase.firestore.DocumentData> {
+  const id = typeof user === "string" ? user : user.id;
+  return getCollection(fs).doc(id);
+}
+
 export function ssToUser(
   ss: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>
 ): User {

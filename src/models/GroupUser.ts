@@ -1,5 +1,3 @@
-// TODO follow Group update
-
 import { useEffect, useState } from "react";
 import { noop } from "../misc/misc";
 import { createDataRecord, DataRecord, updateTimestamp } from "./DataRecord";

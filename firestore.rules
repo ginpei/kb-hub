@@ -5,15 +5,7 @@ service cloud.firestore {
       allow read, write: if false;
     }
     match /groups/{id} {
-      function getUsers(rsc) {
-        return rsc.data.userIds;
-      }
-
-      function isMember(auth, array) {
-        return auth.uid in array;
-      }
-
-      allow read, write: if isMember(request.auth, getUsers(resource));
+      allow read, write: if request.auth.uid != null;
     }
     match /groups/{gid}/users/{id} {
       allow read, write: if request.auth.uid != null;

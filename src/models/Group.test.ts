@@ -1,9 +1,10 @@
 import * as firebase from "@firebase/testing";
+import { describeIfEmulatorUp } from "../firestoreTesting";
 import { createGroup, Group } from "./Group";
 import { createGroupUser } from "./GroupUser";
 
 describe("Group", () => {
-  describe("rules", () => {
+  describeIfEmulatorUp("rules", () => {
     const projectId = "my-test-project";
     let fs: firebase.firestore.Firestore;
     let afs: firebase.firestore.Firestore;

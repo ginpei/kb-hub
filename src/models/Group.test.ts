@@ -1,9 +1,9 @@
 import * as firebase from "@firebase/testing";
 import { describeIfEmulatorUp } from "../firestoreTesting";
 import { createGroup, Group } from "./Group";
-import { createGroupUser } from "./GroupUser";
 
 describe("Group", () => {
+  // TODO fix that emulator randomly throws "Null value error for 'get'"
   describeIfEmulatorUp("rules", () => {
     const projectId = "my-test-project";
     let fs: firebase.firestore.Firestore;
@@ -20,7 +20,11 @@ describe("Group", () => {
       beforeAll(async () => {
         fs = prepareFirestore("user-1");
 
-        await createGroupDoc({ id: "group-1", name: "Group 1" });
+        await createGroupDoc({
+          id: "group-1",
+          name: "Group 1",
+          userIds: ["user-1"],
+        });
       });
 
       afterAll(async () => {
@@ -30,6 +34,28 @@ describe("Group", () => {
       it("can access", async () => {
         const ss = await fs.collection("groups").doc("group-1").get();
         expect(ss.data()?.name).toBe("Group 1");
+      });
+    });
+
+    describe("external user", () => {
+      beforeAll(async () => {
+        fs = prepareFirestore("user-X");
+
+        await createGroupDoc({
+          id: "group-1",
+          name: "Group 1",
+          userIds: ["user-1"],
+        });
+      });
+
+      afterAll(async () => {
+        await firebase.clearFirestoreData({ projectId });
+      });
+
+      it("cannot access", () => {
+        return expect(
+          fs.collection("groups").doc("group-1").get()
+        ).rejects.toThrow();
       });
     });
 
@@ -66,7 +92,6 @@ describe("Group", () => {
       const group = createGroup(initial);
       const doc = aColl.doc(group.id);
       await doc.set(group);
-      await doc.collection("users").add(createGroupUser());
       return doc;
     }
   });

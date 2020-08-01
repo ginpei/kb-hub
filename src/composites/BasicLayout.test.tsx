@@ -35,7 +35,7 @@ describe("<BasicLayout>", () => {
       );
 
       const h1 = getByText("Hello World!");
-      expect(h1).toBeInTheDOM();
+      expect(h1).toBeInTheDocument();
     });
   });
 });

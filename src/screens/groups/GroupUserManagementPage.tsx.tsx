@@ -66,7 +66,7 @@ export const GroupUserManagementPage: React.FC = provideGroupPage(() => {
       <p>
         <Link to={groupPath("view", group)}>Back</Link>
       </p>
-      <details open>
+      <details>
         <summary>Add user</summary>
         {groupUserError && (
           <p style={{ color: "tomato" }}>{groupUserError.message}</p>

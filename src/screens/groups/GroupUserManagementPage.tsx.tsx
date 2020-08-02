@@ -85,7 +85,7 @@ export const GroupUserManagementPage: React.FC = provideGroupPage(() => {
           <li key={gUser.id}>
             {gUser.user.name}
             <br />
-            <small style={{ color: "var(--color-moderate)" }}>
+            <small style={{ color: "var(--color-moderate-fg)" }}>
               {"Privileges: "}
               {gUser.privileges
                 .map((privilege) => privilegeToLabel(privilege))

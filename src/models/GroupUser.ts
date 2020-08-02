@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { createDataRecord, DataRecord } from "./DataRecord";
+import { createDataRecord, DataRecord, updateTimestamp } from "./DataRecord";
 import { createGroup, docToGroup, Group, getGroupDoc } from "./Group";
 import { createUser, getUserDoc, User, ssToUser } from "./User";
 
@@ -101,6 +101,40 @@ export function useGroupUsers(
   }, [fs, group]);
 
   return [users, ready, error];
+}
+
+export async function saveGroupUser(
+  fs: firebase.firestore.Firestore,
+  groupUser: GroupUser
+): Promise<GroupUser> {
+  const coll = getCollection(fs);
+
+  const present = updateTimestamp(groupUser);
+  const raw = groupUserToRow(fs, present);
+
+  if (present.id) {
+    const doc = coll.doc(present.id);
+    await doc.set(raw);
+    return present;
+  }
+
+  const doc = await coll.add(raw);
+  return {
+    ...present,
+    id: doc.id,
+  };
+}
+
+export function groupUserToRow(
+  fs: firebase.firestore.Firestore,
+  groupUser: GroupUser
+): RawGroupUser {
+  const raw: RawGroupUser = {
+    ...groupUser,
+    group: getGroupDoc(fs, groupUser.group),
+    user: getUserDoc(fs, groupUser.user),
+  };
+  return raw;
 }
 
 export function privilegeToLabel(privilege: GroupUserPrivilege): string {

@@ -105,6 +105,23 @@ export async function saveUser(
   };
 }
 
+export async function findUserById(
+  fs: firebase.firestore.Firestore,
+  id: string
+): Promise<User | null> {
+  if (!id) {
+    return null;
+  }
+
+  const coll = getCollection(fs);
+  const ss = await coll.doc(id).get();
+  if (!ss.exists) {
+    return null;
+  }
+  const user = ssToUser(ss);
+  return user;
+}
+
 export function getUserDoc(
   fs: firebase.firestore.Firestore,
   user: User | string

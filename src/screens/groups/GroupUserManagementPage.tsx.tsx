@@ -1,5 +1,5 @@
 import firebase from "firebase/app";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { BasicLayout } from "../../composites/BasicLayout";
 import { Group, groupPath } from "../../models/Group";
@@ -14,12 +14,19 @@ import { GroupUserForm } from "../../stables/GroupUserForm";
 import { ErrorScreen } from "../ErrorScreen";
 import { LoadingScreen } from "../LoadingScreen";
 import { provideGroupPage, useGroupPageContext } from "./GroupPageContext";
+import { useCurrentUserContext } from "../../models/CurrentUserProvider";
 
 const fs = firebase.firestore();
 
 export const GroupUserManagementPage: React.FC = provideGroupPage(() => {
   const group = useGroupPageContext();
-  const [users, usersReady, usersError] = useGroupUsers(fs, group);
+  const user = useCurrentUserContext();
+  const [gUsers, usersReady, usersError] = useGroupUsers(fs, group);
+
+  const isAdmin = useMemo(() => {
+    const loggedInGUser = gUsers.find((v) => v.user.id === user.id);
+    return loggedInGUser?.privileges.includes("userManagement") ?? false;
+  }, [user, gUsers]);
 
   if (!usersReady) {
     return <LoadingScreen />;
@@ -35,9 +42,9 @@ export const GroupUserManagementPage: React.FC = provideGroupPage(() => {
       <p>
         <Link to={groupPath("view", group)}>Back</Link>
       </p>
-      <NewGroupUserSection group={group} />
+      {isAdmin && <NewGroupUserSection group={group} />}
       <ul>
-        {users.map((gUser) => (
+        {gUsers.map((gUser) => (
           <li key={gUser.id}>
             {gUser.user.name}
             <br />
@@ -88,7 +95,7 @@ const NewGroupUserSection: React.FC<{ group: Group }> = ({ group }) => {
 
   return (
     <details>
-      <summary>Add user</summary>
+      <summary>[Admin] Add user</summary>
       {groupUserError && (
         <p style={{ color: "tomato" }}>{groupUserError.message}</p>
       )}

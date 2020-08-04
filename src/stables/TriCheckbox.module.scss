@@ -1,0 +1,35 @@
+.root {
+  cursor: pointer;
+
+  &:hover .outer {
+    transform: scale(1.2); // same as .Checkbox
+  }
+}
+
+.outer {
+  background-color: #fff;
+  border-radius: 0.15em;
+  border: solid 0.5px #666;
+  cursor: default;
+  display: inline-block;
+  font-size: 13.33333px;
+  height: 0.9em;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  width: 0.9em;
+}
+
+.checkbox {
+  display: none;
+}
+
+.text {
+  align-items: center;
+  display: inline-flex;
+  float: left;
+  // font-size: 0.7em;
+  height: 100%;
+  justify-content: center;
+  vertical-align: middle;
+  width: 100%;
+}

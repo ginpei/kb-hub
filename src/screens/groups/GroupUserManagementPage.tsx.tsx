@@ -1,7 +1,9 @@
 import firebase from "firebase/app";
-import React, { useCallback, useState, useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { Button } from "../../atoms/FormBaseUis";
 import { BasicLayout } from "../../composites/BasicLayout";
+import { useCurrentUserContext } from "../../models/CurrentUserProvider";
 import { Group, groupPath } from "../../models/Group";
 import {
   createGroupUser,
@@ -10,11 +12,11 @@ import {
   useGroupUsers,
 } from "../../models/GroupUser";
 import { createUser, findUserById } from "../../models/User";
+import { Dialog } from "../../stables/Dialog";
 import { GroupUserForm } from "../../stables/GroupUserForm";
 import { ErrorScreen } from "../ErrorScreen";
 import { LoadingScreen } from "../LoadingScreen";
 import { provideGroupPage, useGroupPageContext } from "./GroupPageContext";
-import { useCurrentUserContext } from "../../models/CurrentUserProvider";
 
 const fs = firebase.firestore();
 
@@ -22,11 +24,16 @@ export const GroupUserManagementPage: React.FC = provideGroupPage(() => {
   const group = useGroupPageContext();
   const user = useCurrentUserContext();
   const [gUsers, usersReady, usersError] = useGroupUsers(fs, group);
+  const [open, setOpen] = useState(false);
 
   const isAdmin = useMemo(() => {
     const loggedInGUser = gUsers.find((v) => v.user.id === user.id);
     return loggedInGUser?.privileges.includes("userManagement") ?? false;
   }, [user, gUsers]);
+
+  const onClick = useCallback(() => {
+    setOpen(true);
+  }, []);
 
   if (!usersReady) {
     return <LoadingScreen />;
@@ -38,6 +45,9 @@ export const GroupUserManagementPage: React.FC = provideGroupPage(() => {
 
   return (
     <BasicLayout title={`Manage users - ${group.name}`}>
+      <p>
+        <Button onClick={onClick}>Dialog</Button>
+      </p>
       <h1>{group.name} - Manage users</h1>
       <p>
         <Link to={groupPath("view", group)}>Back</Link>
@@ -57,6 +67,15 @@ export const GroupUserManagementPage: React.FC = provideGroupPage(() => {
           </li>
         ))}
       </ul>
+      <Dialog
+        appElement={document.body}
+        title="Hi"
+        isOpen={open}
+        onRequestClose={() => setOpen(false)}
+        shouldCloseOnOverlayClick={true}
+      >
+        <p>Hello World!</p>
+      </Dialog>
     </BasicLayout>
   );
 });

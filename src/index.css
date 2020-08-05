@@ -1,4 +1,6 @@
 :root {
+  --animation-duration-closing: 150ms;
+  --animation-duration: 300ms;
   --border-radius: 4px;
   --color-basic-bg: #f9f9f9;
   --color-basic-fg: #333;

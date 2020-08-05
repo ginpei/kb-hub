@@ -5,6 +5,7 @@
   max-width: calc(800px - var(--padding-base) - var(--padding-base));
   min-width: 200px;
   outline: none;
+  overflow: hidden;
   position: static;
 
   &:focus {
@@ -68,4 +69,25 @@
 
 .main {
   padding: var(--padding-half) var(--padding-base);
+}
+
+.DialogButtonFooter {
+  align-items: center;
+  background-color: var(--color-moderate-bg);
+  border-top: solid 1px var(--color-theme-bg);
+  display: flex;
+  flex-direction: row;
+  gap: var(--padding-base);
+  justify-content: flex-end;
+  margin-left: var(--padding-base-minus);
+  margin-right: var(--padding-base-minus);
+  margin-top: var(--padding-half); // TODO prevent canceling with the last element
+  margin-bottom: var(--padding-half-minus);
+  padding: var(--padding-half) var(--padding-base);
+}
+
+.DialogButton {
+  & + & {
+    // margin-left: var(--padding-base);
+  }
 }

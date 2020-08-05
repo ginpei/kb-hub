@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { Dialog } from "./Dialog";
+import { action } from "@storybook/addon-actions";
+import React, { useState, useCallback } from "react";
 import { Button } from "../atoms/FormBaseUis";
+import { Dialog, DialogButtonFooter, DialogButton } from "./Dialog";
 
 export default {
   title: "Dialog",
@@ -22,17 +23,80 @@ export const Basic: React.FC = () => {
           </a>
         </p>
       </div>
+      <Dialog isOpen={open} onRequestClose={() => setOpen(false)}>
+        <p style={{ textAlign: "center" }}>Hello World!</p>
+      </Dialog>
+    </div>
+  );
+};
+
+export const TitleAndButtons: React.FC = () => {
+  const [open, setOpen] = useState(false);
+  return (
+    <div id="main">
+      <div className="ui-container">
+        <p>
+          <Button onClick={() => setOpen(true)}>Open</Button>
+        </p>
+      </div>
       <Dialog
+        buttons={[
+          {
+            callback: () => {
+              action(`# Cancel`)();
+              setOpen(false);
+            },
+            label: "Cancel",
+          },
+          {
+            callback: () => {
+              action(`# OK`)();
+              setOpen(false);
+            },
+            label: "OK",
+          },
+        ]}
         isOpen={open}
         onRequestClose={() => setOpen(false)}
         title="Hello World!"
       >
+        <p>You are going to do something nice in this world.</p>
+        <p>Are you sure it's OK?</p>
+      </Dialog>
+    </div>
+  );
+};
+
+export const CustomFooter: React.FC = () => {
+  const [open, setOpen] = useState(false);
+
+  const onOkClick = useCallback(() => {
+    action("Make decision")();
+    setOpen(false);
+  }, []);
+
+  return (
+    <div id="main">
+      <div className="ui-container">
         <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis
-          nobis et, accusantium facere expedita quibusdam quod praesentium eaque
-          eos inventore ex, ipsa ad voluptatibus hic ratione nulla? Dolor,
-          officia quo.
+          <Button onClick={() => setOpen(true)}>Open</Button>
         </p>
+      </div>
+      <Dialog
+        isOpen={open}
+        onRequestClose={() => setOpen(false)}
+        shouldCloseOnOverlayClick={false}
+        title="Important decision"
+      >
+        <p>You are going to change the whole world by this decision.</p>
+        <p>Please make sure you truly understand what is going on.</p>
+        <DialogButtonFooter style={{ justifyContent: "space-between" }}>
+          <span>
+            ⚠️
+            <em style={{ color: "tomato" }}>You cannot revert this action.</em>
+          </span>
+          <DialogButton onClick={onOkClick}>Make decision</DialogButton>
+        </DialogButtonFooter>
       </Dialog>
     </div>
   );

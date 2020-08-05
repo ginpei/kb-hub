@@ -11,7 +11,7 @@
   --color-theme-lightBorder: #999;
   --padding-base-minus: -16px;
   --padding-base: 16px;
-  --padding-half-minus: 8px;
+  --padding-half-minus: -8px;
   --padding-half: 8px;
 }
 

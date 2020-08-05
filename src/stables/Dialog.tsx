@@ -1,12 +1,21 @@
 import React, { useMemo } from "react";
 import ReactModal from "react-modal";
 import styles from "./Dialog.module.scss";
+import { Button } from "../atoms/FormBaseUis";
+import { jcn, HtmlProps } from "../misc/misc";
 
 export type DialogProps = ReactModal.Props & {
+  buttons?: DialogButtonDescription[];
   title?: string;
 };
 
+interface DialogButtonDescription {
+  callback: () => void;
+  label: string;
+}
+
 export const Dialog: React.FC<DialogProps> = ({
+  buttons,
   children,
   title,
   ...props
@@ -25,7 +34,31 @@ export const Dialog: React.FC<DialogProps> = ({
   return (
     <ReactModal {...modalProps}>
       <header className={styles.header}>{title}</header>
-      <div className={styles.main}>{children}</div>
+      <div className={styles.main}>
+        {children}
+        {buttons && (
+          <DialogButtonFooter>
+            {buttons.map(({ label, callback }) => (
+              <DialogButton onClick={callback} key={label}>
+                {label}
+              </DialogButton>
+            ))}
+          </DialogButtonFooter>
+        )}
+      </div>
     </ReactModal>
   );
+};
+
+export const DialogButtonFooter: React.FC<HtmlProps<"div">> = ({
+  className,
+  ...props
+}) => {
+  return (
+    <div className={jcn(styles.DialogButtonFooter, className)} {...props} />
+  );
+};
+
+export const DialogButton: typeof Button = ({ className, ...props }) => {
+  return <Button className={jcn(className, styles.DialogButton)} {...props} />;
 };

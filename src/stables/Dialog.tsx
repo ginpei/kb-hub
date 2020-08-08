@@ -9,7 +9,7 @@ export type DialogProps = ReactModal.Props & {
   title?: string;
 };
 
-interface DialogButtonDescription {
+export interface DialogButtonDescription {
   callback: () => void;
   label: string;
 }
@@ -22,7 +22,7 @@ export const Dialog: React.FC<DialogProps> = ({
 }) => {
   const modalProps: React.PropsWithChildren<ReactModal.Props> = useMemo(() => {
     return {
-      appElement: document.querySelector("#main") || undefined,
+      appElement: document.querySelector("#root") || undefined,
       className: styles.root,
       closeTimeoutMS: 150, // var(--animation-duration-closing)
       contentLabel: title,

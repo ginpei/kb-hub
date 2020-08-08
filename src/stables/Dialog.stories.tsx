@@ -11,7 +11,7 @@ export default {
 export const Basic: React.FC = () => {
   const [open, setOpen] = useState(false);
   return (
-    <div id="main">
+    <>
       <div className="ui-container">
         <p>
           <Button onClick={() => setOpen(true)}>Open</Button>
@@ -26,14 +26,14 @@ export const Basic: React.FC = () => {
       <Dialog isOpen={open} onRequestClose={() => setOpen(false)}>
         <p style={{ textAlign: "center" }}>Hello World!</p>
       </Dialog>
-    </div>
+    </>
   );
 };
 
 export const TitleAndButtons: React.FC = () => {
   const [open, setOpen] = useState(false);
   return (
-    <div id="main">
+    <>
       <div className="ui-container">
         <p>
           <Button onClick={() => setOpen(true)}>Open</Button>
@@ -63,7 +63,7 @@ export const TitleAndButtons: React.FC = () => {
         <p>You are going to do something nice in this world.</p>
         <p>Are you sure it's OK?</p>
       </Dialog>
-    </div>
+    </>
   );
 };
 
@@ -76,7 +76,7 @@ export const CustomFooter: React.FC = () => {
   }, []);
 
   return (
-    <div id="main">
+    <>
       <div className="ui-container">
         <p>
           <Button onClick={() => setOpen(true)}>Open</Button>
@@ -98,6 +98,6 @@ export const CustomFooter: React.FC = () => {
           <DialogButton onClick={onOkClick}>Make decision</DialogButton>
         </DialogButtonFooter>
       </Dialog>
-    </div>
+    </>
   );
 };

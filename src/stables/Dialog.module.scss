@@ -30,7 +30,7 @@
   }
 }
 
-:global(.ReactModal__Body--open #main) {
+:global(.ReactModal__Body--open #root) {
   filter: blur(2px);
 }
 

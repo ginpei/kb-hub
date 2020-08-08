@@ -14,7 +14,15 @@ export type RawGroupUser = Omit<GroupUser, "group" | "user"> & {
   user: firebase.firestore.DocumentReference<firebase.firestore.DocumentData>;
 };
 
-type GroupUserPrivilege = "login" | "userManagement";
+export type GroupUserPrivilege = typeof GroupUserPrivilege[number];
+
+/**
+ * The second value becomes `null` if some of group users are `true` while the
+ * others are `false`.
+ */
+export type PrivilegeFlags = [GroupUserPrivilege, boolean | null];
+
+export const GroupUserPrivilege = ["login", "userManagement"] as const;
 
 const privilegeLabels: Record<GroupUserPrivilege, string> = {
   login: "Login",
@@ -143,6 +151,34 @@ export function privilegeToLabel(privilege: GroupUserPrivilege): string {
     throw new Error(`Unknown privilege "${privilege}"`);
   }
   return label;
+}
+
+export function isPrivilegeString(s: string): s is GroupUserPrivilege {
+  return (GroupUserPrivilege as readonly string[]).includes(s);
+}
+
+export function getPrivilegeFlagsOf(gUsers: GroupUser[]): PrivilegeFlags[] {
+  const [first, ...rest] = gUsers;
+
+  const firstFlags: PrivilegeFlags[] = GroupUserPrivilege.map((v) => [
+    v,
+    first?.privileges.includes(v) ?? false,
+  ]);
+
+  const result: PrivilegeFlags[] = firstFlags.map(([privilege, flag]) => {
+    const newFlag = rest.reduce((lastFlag, v) => {
+      if (v === null) {
+        return null;
+      }
+
+      const curFlag = v.privileges.includes(privilege);
+      const mergedFlag = curFlag === lastFlag ? lastFlag : null;
+      return mergedFlag;
+    }, flag);
+    return [privilege, newFlag];
+  });
+
+  return result;
 }
 
 function getCollection(fs: firebase.firestore.Firestore) {

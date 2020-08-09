@@ -1,13 +1,13 @@
 import firebase from "firebase/app";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "../../atoms/FormBaseUis";
 import { BasicLayout } from "../../composites/BasicLayout";
+import { PrivilegesDialog } from "../../groups/composites/PrivilegesDialog";
 import { useCurrentUserContext } from "../../models/CurrentUserProvider";
 import { Group, groupPath } from "../../models/Group";
 import {
   createGroupUser,
-  getPrivilegeFlagsOf,
   GroupUser,
   PrivilegeFlags,
   privilegeToLabel,
@@ -17,11 +17,9 @@ import {
 import { createUser, findUserById, User } from "../../models/User";
 import { Checkbox } from "../../stables/FormUIs";
 import { GroupUserForm } from "../../stables/GroupUserForm";
-import { OnTriCheckboxChange, TriCheckbox } from "../../stables/TriCheckbox";
 import { ErrorScreen } from "../ErrorScreen";
 import { LoadingScreen } from "../LoadingScreen";
 import { provideGroupPage, useGroupPageContext } from "./GroupPageContext";
-import { Dialog, DialogButtonDescription } from "../../stables/Dialog";
 
 const fs = firebase.firestore();
 
@@ -167,82 +165,6 @@ const GroupUserListSection: React.FC<{ gUsers: GroupUser[]; user: User }> = ({
         onOk={onDialogClose}
       />
     </section>
-  );
-};
-
-const PrivilegesDialog: React.FC<{
-  gUsers: GroupUser[];
-  isOpen: boolean;
-  onOk: (result: PrivilegeFlags[] | null) => void;
-}> = ({ gUsers, isOpen, onOk }) => {
-  const [pFlags, setPFlags] = useState<PrivilegeFlags[]>([]);
-  const initialPFlags = useMemo(() => getPrivilegeFlagsOf(gUsers), [gUsers]);
-
-  const buttons = useMemo<DialogButtonDescription[]>(
-    () => [
-      {
-        callback: () => {
-          onOk(null);
-        },
-        label: "Cancel",
-      },
-      {
-        callback: () => {
-          onOk(pFlags);
-        },
-        label: "OK",
-      },
-    ],
-    [onOk, pFlags]
-  );
-
-  const onRequestClose = useCallback(() => {
-    onOk(null);
-  }, [onOk]);
-
-  const onCheckboxChange: OnTriCheckboxChange = useCallback(
-    (event, checked) => {
-      const privilege = event.currentTarget.name;
-      const pair = pFlags.find(([v]) => v === privilege);
-      if (!pair) {
-        throw new Error(`Unknown privilege tag "${privilege}"`);
-      }
-
-      pair[1] = checked;
-      setPFlags([...pFlags]);
-    },
-    [pFlags]
-  );
-
-  useEffect(() => {
-    setPFlags([...initialPFlags]);
-  }, [initialPFlags]);
-
-  return (
-    <Dialog
-      buttons={buttons}
-      isOpen={isOpen}
-      onRequestClose={onRequestClose}
-      title="Update user privileges"
-    >
-      <p>
-        {pFlags.map(([privilege, flag]) => (
-          <TriCheckbox
-            checked={flag}
-            key={privilege}
-            label={privilegeToLabel(privilege)}
-            name={privilege}
-            onChange={onCheckboxChange}
-          />
-        ))}
-      </p>
-      <p>
-        <small style={{ color: "var(--color-moderate-fg)" }}>
-          {"Assigning to: "}
-          {gUsers.map(({ user }) => user.name).join(", ")}
-        </small>
-      </p>
-    </Dialog>
   );
 };
 

@@ -1,6 +1,6 @@
 import { action } from "@storybook/addon-actions";
 import React from "react";
-import { Radio } from "./FormUIs";
+import { Radio } from "./FormUis";
 
 export default {
   title: "FormUIs/Radio",

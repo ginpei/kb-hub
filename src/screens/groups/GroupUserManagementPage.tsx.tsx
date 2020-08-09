@@ -15,7 +15,7 @@ import {
   useGroupUsers,
 } from "../../models/GroupUser";
 import { createUser, findUserById, User } from "../../models/User";
-import { Checkbox } from "../../stables/FormUIs";
+import { Checkbox } from "../../stables/FormUis";
 import { GroupUserForm } from "../../stables/GroupUserForm";
 import { ErrorScreen } from "../ErrorScreen";
 import { LoadingScreen } from "../LoadingScreen";

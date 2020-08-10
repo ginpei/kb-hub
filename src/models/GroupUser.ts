@@ -133,6 +133,27 @@ export async function saveGroupUser(
   };
 }
 
+export function updatePrivileges(
+  groupUser: GroupUser,
+  pFlags: PrivilegeFlags[]
+): GroupUser {
+  const privileges = pFlags.reduce((acc, pFlag) => {
+    const [type, flag] = (pFlag as any) as PrivilegeFlags;
+    const index = acc.indexOf(type);
+    if (flag && index < 0) {
+      acc.push(type);
+    } else if (!flag && index >= 0) {
+      acc.splice(index, 1);
+    }
+    return acc;
+  }, groupUser.privileges);
+
+  return {
+    ...groupUser,
+    privileges,
+  };
+}
+
 export function groupUserToRow(
   fs: firebase.firestore.Firestore,
   groupUser: GroupUser

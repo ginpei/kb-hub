@@ -12,6 +12,7 @@ import {
   privilegeToLabel,
   saveGroupUser,
   useGroupUsers,
+  updatePrivileges,
 } from "../../models/GroupUser";
 import { createUser, findUserById, User } from "../../models/User";
 import { Button } from "../../share/atoms/FormBaseUis";
@@ -20,6 +21,8 @@ import { Checkbox } from "../../share/stables/FormUis";
 import { ErrorScreen } from "../ErrorScreen";
 import { LoadingScreen } from "../LoadingScreen";
 import { provideGroupPage, useGroupPageContext } from "./GroupPageContext";
+import { sleep } from "../../misc/misc";
+import { SuccessMessage, InfoMessage } from "../../share/atoms/Message";
 
 const fs = firebase.firestore();
 
@@ -107,16 +110,19 @@ const GroupUserListSection: React.FC<{ gUsers: GroupUser[]; user: User }> = ({
   gUsers,
   user,
 }) => {
+  const [saving, setSaving] = useState(false);
+  const [saveSucceeded, setSaveSucceeded] = useState(false);
   const [managingPrivileges, setManagingPrivileges] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-
-  const selectedGUsers = useMemo(
-    () => gUsers.filter((v) => selectedIds.includes(v.id)),
-    [gUsers, selectedIds]
-  );
+  const [selectedGUsers, setSelectedGUsers] = useState<GroupUser[]>([]);
 
   const onManagePrivilegesClick = useCallback(() => {
+    setSelectedGUsers(gUsers.filter((v) => selectedIds.includes(v.id)));
     setManagingPrivileges(true);
+  }, [gUsers, selectedIds]);
+
+  const onCloseSaveSucceedMessageClick = useCallback(() => {
+    setSaveSucceeded(false);
   }, []);
 
   const onGUserCheckChange = useCallback(
@@ -131,10 +137,32 @@ const GroupUserListSection: React.FC<{ gUsers: GroupUser[]; user: User }> = ({
     [selectedIds]
   );
 
-  const onDialogClose = useCallback((pFlags: PrivilegeFlags[] | null) => {
-    console.log("# dialog", pFlags?.map(([v, u]) => `${v}=${u}`).join(", "));
-    setManagingPrivileges(false);
-  }, []);
+  const onDialogClose = useCallback(
+    async (pFlags: PrivilegeFlags[] | null) => {
+      setManagingPrivileges(false);
+
+      if (pFlags) {
+        const newGUsers = selectedGUsers.map((gUser) =>
+          updatePrivileges(gUser, pFlags)
+        );
+        setSaving(true);
+        setSaveSucceeded(false);
+        try {
+          await Promise.all<GroupUser | void>([
+            ...newGUsers.map((v) => saveGroupUser(fs, v)),
+            sleep(1000),
+          ]);
+          setSaveSucceeded(true);
+        } catch (error) {
+          // TODO create shared error handler
+          console.error(error);
+        } finally {
+          setSaving(false);
+        }
+      }
+    },
+    [selectedGUsers]
+  );
 
   return (
     <section className="GroupUserListSection">
@@ -148,17 +176,34 @@ const GroupUserListSection: React.FC<{ gUsers: GroupUser[]; user: User }> = ({
         <Button disabled={selectedIds.length < 1}>Suspend</Button>
         <Button disabled={selectedIds.length < 1}>Delete</Button>
       </p>
-      <ul>
-        {gUsers.map((gUser) => (
-          <GUserItem
-            gUser={gUser}
-            isCurrentUser={gUser.user.id === user.id}
-            key={gUser.id}
-            onCheckChange={onGUserCheckChange}
-            selected={selectedIds.includes(gUser.id)}
-          />
-        ))}
-      </ul>
+      {saveSucceeded && (
+        <SuccessMessage>
+          {/* TODO prepare .btn-link */}
+          <span
+            className="btn-link"
+            onClick={onCloseSaveSucceedMessageClick}
+            style={{ cursor: "pointer", float: "right" }}
+          >
+            ×
+          </span>
+          Saved.
+        </SuccessMessage>
+      )}
+      {saving ? (
+        <InfoMessage>Saving...</InfoMessage>
+      ) : (
+        <ul>
+          {gUsers.map((gUser) => (
+            <GUserItem
+              gUser={gUser}
+              isCurrentUser={gUser.user.id === user.id}
+              key={gUser.id}
+              onCheckChange={onGUserCheckChange}
+              selected={selectedIds.includes(gUser.id)}
+            />
+          ))}
+        </ul>
+      )}
       <PrivilegesDialog
         gUsers={selectedGUsers}
         isOpen={managingPrivileges}

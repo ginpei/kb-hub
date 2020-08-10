@@ -1,9 +1,22 @@
 :root {
+  --animation-duration-closing: 150ms;
+  --animation-duration: 300ms;
+  --border-radius: 4px;
   --color-basic-bg: #f9f9f9;
   --color-basic-fg: #333;
+  --color-info-bg: #eef9ff;
+  --color-info-fg: #6699cc;
+  --color-moderate-bg: #f0f0f0;
+  --color-moderate-fg: #666;
+  --color-success-bg: #eeffee;
+  --color-success-fg: teal;
   --color-theme-bg: #036;
   --color-theme-fg: #fff;
   --color-theme-lightBorder: #999;
+  --padding-base-minus: -16px;
+  --padding-base: 16px;
+  --padding-half-minus: -8px;
+  --padding-half: 8px;
 }
 
 body {
@@ -15,10 +28,26 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+details {
+  background-color: var(--color-moderate-bg);
+  border-radius: var(--border-radius);
+  border: solid 1px var(--color-moderate-fg);
+  padding: 0 var(--padding-base);
+}
+
+summary {
+  margin-left: var(--padding-base-minus);
+  margin-right: var(--padding-base-minus);
+  padding: var(--padding-half) var(--padding-base);
+}
+details[open] summary {
+  border-bottom: solid 1px var(--color-moderate-fg);
+}
+
 .ui-container {
   margin-left: auto;
   margin-right: auto;
-  max-width: calc(800px - 2rem);
-  padding-left: 1rem;
-  padding-right: 1rem;
+  max-width: calc(800px - var(--padding-base) - var(--padding-base));
+  padding-left: var(--padding-base);
+  padding-right: var(--padding-base);
 }

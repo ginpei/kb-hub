@@ -1,0 +1,15 @@
+.message {
+  border-radius: var(--border-radius);
+  border: solid 1px currentColor;
+  padding: var(--padding-base);
+}
+
+.SuccessMessage {
+  background-color: var(--color-success-bg);
+  color: var(--color-success-fg);
+}
+
+.InfoMessage {
+  background-color: var(--color-info-bg);
+  color: var(--color-info-fg);
+}

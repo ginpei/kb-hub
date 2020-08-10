@@ -105,11 +105,32 @@ export async function saveUser(
   };
 }
 
-function getCollection(fs: firebase.firestore.Firestore) {
-  return fs.collection("users");
+export async function findUserById(
+  fs: firebase.firestore.Firestore,
+  id: string
+): Promise<User | null> {
+  if (!id) {
+    return null;
+  }
+
+  const coll = getCollection(fs);
+  const ss = await coll.doc(id).get();
+  if (!ss.exists) {
+    return null;
+  }
+  const user = ssToUser(ss);
+  return user;
 }
 
-function ssToUser(
+export function getUserDoc(
+  fs: firebase.firestore.Firestore,
+  user: User | string
+): firebase.firestore.DocumentReference<firebase.firestore.DocumentData> {
+  const id = typeof user === "string" ? user : user.id;
+  return getCollection(fs).doc(id);
+}
+
+export function ssToUser(
   ss: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>
 ): User {
   const data = ss.data();
@@ -118,4 +139,8 @@ function ssToUser(
     id: ss.id,
   };
   return knowledge;
+}
+
+function getCollection(fs: firebase.firestore.Firestore) {
+  return fs.collection("users");
 }

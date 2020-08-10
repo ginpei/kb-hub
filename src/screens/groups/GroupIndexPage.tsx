@@ -1,9 +1,10 @@
 import firebase from "firebase/app";
 import React from "react";
 import { Link } from "react-router-dom";
-import { BasicLayout } from "../../composites/BasicLayout";
+import { BasicLayout } from "../../share/composites/BasicLayout";
 import { useCurrentUserContext } from "../../models/CurrentUserProvider";
-import { groupPath, useLatestGroups } from "../../models/Group";
+import { groupPath } from "../../models/Group";
+import { useUserGroups } from "../../models/GroupUser";
 import { ErrorScreen } from "../ErrorScreen";
 import { LoadingScreen } from "../LoadingScreen";
 
@@ -11,7 +12,7 @@ const fs = firebase.firestore();
 
 export const GroupIndexPage: React.FC = () => {
   const user = useCurrentUserContext();
-  const [groups, groupsReady, groupsError] = useLatestGroups(fs, user);
+  const [groups, groupsReady, groupsError] = useUserGroups(fs, user);
 
   if (!groupsReady) {
     return <LoadingScreen />;

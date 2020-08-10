@@ -1,6 +1,6 @@
 import React from "react";
 import { Input, Label } from "../atoms/FormBaseUis";
-import { HtmlComponent } from "../misc/misc";
+import { HtmlComponent } from "../../misc/misc";
 import styles from "./FormUis.module.scss";
 
 export const Checkbox: HtmlComponent<

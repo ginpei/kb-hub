@@ -18,3 +18,7 @@ export const noop: () => void = () => {
 export function jcn(...names: unknown[]): string {
   return names.filter((v) => typeof v === "string").join(" ");
 }
+
+export function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}

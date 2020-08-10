@@ -1,9 +1,9 @@
 import firebase from "firebase/app";
 import React, { useCallback, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { BasicLayout } from "../../composites/BasicLayout";
+import { BasicLayout } from "../../share/composites/BasicLayout";
 import { createGroup, Group, groupPath, saveGroup } from "../../models/Group";
-import { GroupForm } from "../../stables/GroupForm";
+import { GroupForm } from "../../groups/stables/GroupForm";
 
 const fs = firebase.firestore();
 

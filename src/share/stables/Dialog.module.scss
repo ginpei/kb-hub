@@ -1,0 +1,93 @@
+.root {
+  background-color: var(--color-basic-bg);
+  border-radius: var(--border-radius);
+  border: solid 1px var(--color-theme-bg);
+  max-width: calc(800px - var(--padding-base) - var(--padding-base));
+  min-width: 200px;
+  outline: none;
+  overflow: hidden;
+  position: static;
+
+  &:focus {
+    box-shadow: 0 0 0 1px var(--color-basic-bg);
+  }
+
+  &:global(.ReactModal__Content) {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+
+  &:global(.ReactModal__Content--after-open) {
+    opacity: 1;
+    transform: scale(1);
+    transition: all var(--animation-duration);
+  }
+
+  &:global(.ReactModal__Content--before-close) {
+    opacity: 0;
+    transform: scale(1.1);
+    transition: all var(--animation-duration-closing);
+  }
+}
+
+:global(.ReactModal__Body--open #root) {
+  filter: blur(2px);
+}
+
+.overlay {
+  align-items: center;
+  background-color: #0009;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+
+  &:global(.ReactModal__Overlay) {
+    opacity: 0;
+  }
+
+  &:global(.ReactModal__Overlay--after-open) {
+    opacity: 1;
+    transition: all var(--animation-duration);
+  }
+
+  &:global(.ReactModal__Overlay--before-close) {
+    opacity: 0;
+    transition: all var(--animation-duration-closing);
+  }
+}
+
+.header {
+  background-color: var(--color-theme-bg);
+  color: var(--color-theme-fg);
+  border-bottom: solid 1px var(--color-theme-bg);
+  padding: var(--padding-half) var(--padding-base);
+}
+
+.main {
+  padding: var(--padding-half) var(--padding-base);
+}
+
+.DialogButtonFooter {
+  align-items: center;
+  background-color: var(--color-moderate-bg);
+  border-top: solid 1px var(--color-theme-bg);
+  display: flex;
+  flex-direction: row;
+  gap: var(--padding-base);
+  justify-content: flex-end;
+  margin-left: var(--padding-base-minus);
+  margin-right: var(--padding-base-minus);
+  margin-top: var(--padding-half); // TODO prevent canceling with the last element
+  margin-bottom: var(--padding-half-minus);
+  padding: var(--padding-half) var(--padding-base);
+}
+
+.DialogButton {
+  & + & {
+    // margin-left: var(--padding-base);
+  }
+}

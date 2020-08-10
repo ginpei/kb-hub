@@ -1,6 +1,6 @@
 import { action } from "@storybook/addon-actions";
 import React from "react";
-import { Checkbox } from "./FormUIs";
+import { Checkbox } from "./FormUis";
 
 export default {
   title: "FormUIs/Checkbox",

@@ -11,6 +11,7 @@
     "@types/node": "^12.12.51",
     "@types/react": "^16.9.43",
     "@types/react-dom": "^16.9.8",
+    "@types/react-modal": "^3.10.6",
     "@types/react-router-dom": "^5.1.5",
     "firebase": "^7.16.1",
     "firebaseui": "^4.6.0",
@@ -18,18 +19,20 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-firebaseui": "^4.1.0",
+    "react-modal": "^3.11.2",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "typescript": "^3.7.5"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "build-storybook": "build-storybook -s public",
     "build": "react-scripts build",
-    "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "emu": "firebase emulators:start --only firestore",
     "lint": "eslint --ext js,ts,tsx .",
+    "start": "react-scripts start",
     "storybook": "start-storybook -p 9009 -s public",
-    "build-storybook": "build-storybook -s public"
+    "test": "react-scripts test"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -47,6 +50,7 @@
     ]
   },
   "devDependencies": {
+    "@firebase/testing": "^0.20.9",
     "@storybook/addon-actions": "^5.3.19",
     "@storybook/addon-links": "^5.3.19",
     "@storybook/addons": "^5.3.19",
@@ -61,6 +65,7 @@
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-prettier": "^3.1.4",
+    "firebase-tools": "^8.6.0",
     "prettier": "^2.0.5"
   },
   "config": {

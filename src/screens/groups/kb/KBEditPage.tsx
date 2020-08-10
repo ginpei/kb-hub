@@ -2,13 +2,14 @@ import NiceMarkdown from "@ginpei/react-nice-markdown";
 import firebase from "firebase/app";
 import React, { useCallback, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { BasicLayout } from "../../composites/BasicLayout";
+import { KBEditForm } from "../../../groups/stables/KBEditForm";
 import {
   Knowledge,
   knowledgePath,
   saveKnowledge,
-} from "../../models/Knowledge";
-import { KBEditForm } from "../../stables/KBEditForm";
+} from "../../../models/Knowledge";
+import { BasicLayout } from "../../../share/composites/BasicLayout";
+import { useGroupPageContext } from "../GroupPageContext";
 import {
   provideKnowledgePage,
   useKnowledgePageContext,
@@ -17,6 +18,7 @@ import {
 const fs = firebase.firestore();
 
 export const KBEditPage: React.FC = provideKnowledgePage(() => {
+  const group = useGroupPageContext();
   const initial = useKnowledgePageContext();
   const [knowledge, setKnowledge] = useState(initial);
   const [saving, setSaving] = useState(false);
@@ -31,16 +33,16 @@ export const KBEditPage: React.FC = provideKnowledgePage(() => {
 
   const onSubmit = useCallback(async () => {
     setSaving(true);
-    await saveKnowledge(fs, knowledge);
+    await saveKnowledge(fs, group, knowledge);
     setSaving(false);
-    history.push(knowledgePath("view", knowledge));
-  }, [knowledge, history]);
+    history.push(knowledgePath("view", group, knowledge));
+  }, [group, knowledge, history]);
 
   return (
     <BasicLayout title="View">
       <h1>Edit</h1>
       <p>
-        <Link to={knowledgePath("view", knowledge)}>Back</Link>
+        <Link to={knowledgePath("view", group, knowledge)}>Back</Link>
       </p>
       <KBEditForm
         disabled={saving}

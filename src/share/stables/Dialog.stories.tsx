@@ -1,7 +1,7 @@
 import { action } from "@storybook/addon-actions";
-import React, { useState, useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { Button } from "../atoms/FormBaseUis";
-import { Dialog, DialogButtonFooter, DialogButton } from "./Dialog";
+import { Dialog, DialogButton, DialogButtonFooter } from "./Dialog";
 
 export default {
   title: "Dialog",

@@ -1,7 +1,7 @@
 import NiceMarkdown from "@ginpei/react-nice-markdown";
 import React from "react";
 import { Link } from "react-router-dom";
-import { BasicLayout } from "../../../composites/BasicLayout";
+import { BasicLayout } from "../../../share/composites/BasicLayout";
 import { knowledgePath } from "../../../models/Knowledge";
 import { useGroupPageContext } from "../GroupPageContext";
 import {

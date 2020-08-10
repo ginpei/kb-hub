@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
-import { Button, Input, Textarea } from "../atoms/FormBaseUis";
-import { Knowledge } from "../models/Knowledge";
+import { Knowledge } from "../../models/Knowledge";
+import { Button, Input, Textarea } from "../../share/atoms/FormBaseUis";
 
 export const KBEditForm: React.FC<{
   disabled: boolean;

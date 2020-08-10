@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import ReactModal from "react-modal";
 import styles from "./Dialog.module.scss";
 import { Button } from "../atoms/FormBaseUis";
-import { jcn, HtmlProps } from "../misc/misc";
+import { jcn, HtmlProps } from "../../misc/misc";
 
 export type DialogProps = ReactModal.Props & {
   buttons?: DialogButtonDescription[];

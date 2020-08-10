@@ -1,10 +1,10 @@
 import firebase from "firebase/app";
 import React, { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
-import { BasicLayout } from "../composites/BasicLayout";
+import { UserForm } from "../groups/stables/UserForm";
 import { useCurrentUserContext } from "../models/CurrentUserProvider";
 import { saveUser, User } from "../models/User";
-import { UserForm } from "../stables/UserForm";
+import { BasicLayout } from "../share/composites/BasicLayout";
 
 const fs = firebase.firestore();
 

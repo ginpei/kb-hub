@@ -5,8 +5,11 @@ import {
   PrivilegeFlags,
   privilegeToLabel,
 } from "../../models/GroupUser";
-import { Dialog, DialogButtonDescription } from "../../stables/Dialog";
-import { OnTriCheckboxChange, TriCheckbox } from "../../stables/TriCheckbox";
+import { Dialog, DialogButtonDescription } from "../../share/stables/Dialog";
+import {
+  OnTriCheckboxChange,
+  TriCheckbox,
+} from "../../share/stables/TriCheckbox";
 
 export const PrivilegesDialog: React.FC<{
   gUsers: GroupUser[];

@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
-import { Button, Input } from "../atoms/FormBaseUis";
-import { GroupUser } from "../models/GroupUser";
+import { GroupUser } from "../../models/GroupUser";
+import { Button, Input } from "../../share/atoms/FormBaseUis";
 
 export const GroupUserForm: React.FC<{
   disabled: boolean;

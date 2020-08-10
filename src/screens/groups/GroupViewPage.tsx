@@ -1,7 +1,7 @@
 import firebase from "firebase/app";
 import React from "react";
 import { Link } from "react-router-dom";
-import { BasicLayout } from "../../composites/BasicLayout";
+import { BasicLayout } from "../../share/composites/BasicLayout";
 import { groupPath } from "../../models/Group";
 import { useLatestKnowledges, knowledgePath } from "../../models/Knowledge";
 import { ErrorScreen } from "../ErrorScreen";

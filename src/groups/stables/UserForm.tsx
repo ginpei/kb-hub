@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
-import { Button, Input } from "../atoms/FormBaseUis";
-import { User } from "../models/User";
+import { User } from "../../models/User";
+import { Button, Input } from "../../share/atoms/FormBaseUis";
 
 export const UserForm: React.FC<{
   disabled: boolean;

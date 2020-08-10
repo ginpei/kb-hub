@@ -1,5 +1,5 @@
 import React from "react";
-import { BasicLayout } from "../composites/BasicLayout";
+import { BasicLayout } from "../share/composites/BasicLayout";
 
 export const NotFoundScreen: React.FC = () => {
   return (

@@ -1,7 +1,7 @@
 import firebase from "firebase/app";
 import React from "react";
 import { Link } from "react-router-dom";
-import { BasicLayout } from "../../composites/BasicLayout";
+import { BasicLayout } from "../../share/composites/BasicLayout";
 import { useCurrentUserContext } from "../../models/CurrentUserProvider";
 import { groupPath } from "../../models/Group";
 import { useUserGroups } from "../../models/GroupUser";

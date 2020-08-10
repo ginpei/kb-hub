@@ -2,18 +2,18 @@ import NiceMarkdown from "@ginpei/react-nice-markdown";
 import firebase from "firebase/app";
 import React, { useCallback, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { BasicLayout } from "../../../composites/BasicLayout";
+import { KBEditForm } from "../../../groups/stables/KBEditForm";
 import {
   Knowledge,
   knowledgePath,
   saveKnowledge,
 } from "../../../models/Knowledge";
-import { KBEditForm } from "../../../stables/KBEditForm";
+import { BasicLayout } from "../../../share/composites/BasicLayout";
+import { useGroupPageContext } from "../GroupPageContext";
 import {
   provideKnowledgePage,
   useKnowledgePageContext,
 } from "./KnowledgePageContext";
-import { useGroupPageContext } from "../GroupPageContext";
 
 const fs = firebase.firestore();
 

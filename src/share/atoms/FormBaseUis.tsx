@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { HtmlComponent, jcn } from "../misc/misc";
+import { HtmlComponent, jcn } from "../../misc/misc";
 import styles from "./FormBaseUis.module.scss";
 
 interface CommonFormInterface {

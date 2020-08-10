@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { BasicLayout } from "../composites/BasicLayout";
+import { BasicLayout } from "../share/composites/BasicLayout";
 import { groupPath } from "../models/Group";
 
 export const HomePage: React.FC = () => {

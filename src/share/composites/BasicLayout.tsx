@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { jcn } from "../misc/misc";
+import { jcn } from "../../misc/misc";
 import styles from "./BasicLayout.module.scss";
 
 export type BasicLayoutProps = {

@@ -1,9 +1,8 @@
 import firebase from "firebase/app";
 import React, { useCallback, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { Button } from "../../atoms/FormBaseUis";
-import { BasicLayout } from "../../composites/BasicLayout";
 import { PrivilegesDialog } from "../../groups/composites/PrivilegesDialog";
+import { GroupUserForm } from "../../groups/stables/GroupUserForm";
 import { useCurrentUserContext } from "../../models/CurrentUserProvider";
 import { Group, groupPath } from "../../models/Group";
 import {
@@ -15,8 +14,9 @@ import {
   useGroupUsers,
 } from "../../models/GroupUser";
 import { createUser, findUserById, User } from "../../models/User";
-import { Checkbox } from "../../stables/FormUis";
-import { GroupUserForm } from "../../stables/GroupUserForm";
+import { Button } from "../../share/atoms/FormBaseUis";
+import { BasicLayout } from "../../share/composites/BasicLayout";
+import { Checkbox } from "../../share/stables/FormUis";
 import { ErrorScreen } from "../ErrorScreen";
 import { LoadingScreen } from "../LoadingScreen";
 import { provideGroupPage, useGroupPageContext } from "./GroupPageContext";

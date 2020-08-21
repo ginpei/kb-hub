@@ -1,6 +1,6 @@
 import firebase from "firebase/app";
 import React, { createContext, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "../../misc/react-router-dom";
 import { createGroup, Group, useGroup } from "../../models/Group";
 import { useCurrentUser } from "../../models/User";
 import { ErrorScreen } from "../ErrorScreen";
@@ -31,9 +31,13 @@ const GroupPageContext = createContext(createGroup());
  */
 export function provideGroupPage(Component: React.FC): React.FC {
   return () => {
-    const { id, groupId } = useParams();
+    const params = useParams();
+    const groupId = params.groupId || params.id;
+    if (!groupId) {
+      return <NotFoundScreen />;
+    }
     const [user, userReady, userError] = useCurrentUser(auth, fs);
-    const [group, groupReady, groupError] = useGroup(fs, user, groupId || id);
+    const [group, groupReady, groupError] = useGroup(fs, user, groupId);
 
     if (!userReady || !groupReady) {
       return <LoadingScreen />;

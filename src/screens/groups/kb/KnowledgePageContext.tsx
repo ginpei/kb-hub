@@ -1,6 +1,6 @@
 import firebase from "firebase/app";
 import React, { createContext, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "../../../misc/react-router-dom";
 import {
   createKnowledge,
   Knowledge,
@@ -34,6 +34,9 @@ const KnowledgePageContext = createContext(createKnowledge());
 export function provideKnowledgePage(Component: React.FC): React.FC {
   return provideGroupPage(() => {
     const { id } = useParams();
+    if (!id) {
+      return <NotFoundScreen />;
+    }
     const group = useGroupPageContext();
     const [knowledge, knowledgeReady, knowledgeError] = useKnowledge(
       fs,

@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
-import { Button, Input } from "../../share/atoms/FormBaseUis";
+import { Form } from "react-bootstrap";
 import { Group } from "../../models/Group";
+import { Button } from "../../share/atoms/FormBaseUis";
 
 export const GroupForm: React.FC<{
   disabled: boolean;
@@ -16,31 +17,30 @@ export const GroupForm: React.FC<{
     [group, onSubmit]
   );
 
-  const onTextChange = useCallback(
+  const onNameChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      const { name, value } = event.currentTarget;
-      onChange({ [name]: value });
+      const { value } = event.currentTarget;
+      onChange({ name: value });
     },
     [onChange]
   );
 
   return (
-    <form className="GroupForm" onSubmit={onFormSubmit}>
-      <p>
-        <label>
-          Name:
-          <Input
-            disabled={disabled}
-            name="name"
-            onChange={onTextChange}
-            type="text"
-            value={group.name}
-          />
-        </label>
-      </p>
-      <p>
-        <Button disabled={disabled}>{group.id ? "Update" : "Create"}</Button>
-      </p>
-    </form>
+    <Form onSubmit={onFormSubmit}>
+      <Form.Group controlId="name">
+        <Form.Label>Name</Form.Label>
+        <Form.Control
+          disabled={disabled}
+          onChange={onNameChange}
+          placeholder="e.g. Western Example Co. Ltd."
+          required
+          type="text"
+          value={group.name}
+        />
+      </Form.Group>
+      <Button disabled={disabled} variant="primary">
+        {group.id ? "Update" : "Create"}
+      </Button>
+    </Form>
   );
 };

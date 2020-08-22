@@ -1,4 +1,5 @@
 import React, { useCallback } from "react";
+import { Form } from "react-bootstrap";
 import { User } from "../../models/User";
 import { Button, Input } from "../../share/atoms/FormBaseUis";
 
@@ -16,31 +17,30 @@ export const UserForm: React.FC<{
     [onSubmit, user]
   );
 
-  const onTextChange = useCallback(
+  const onNameChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      const { name, value } = event.currentTarget;
-      onChange({ [name]: value });
+      const { value } = event.currentTarget;
+      onChange({ name: value });
     },
     [onChange]
   );
 
   return (
-    <form className="UserForm" onSubmit={onFormSubmit}>
-      <p>
-        <label>
-          Name:
-          <Input
-            disabled={disabled}
-            name="name"
-            onChange={onTextChange}
-            type="text"
-            value={user.name}
-          />
-        </label>
-      </p>
-      <p>
-        <Button disabled={disabled}>Save</Button>
-      </p>
-    </form>
+    <Form onSubmit={onFormSubmit}>
+      <Form.Group controlId="name">
+        <Form.Label>Name</Form.Label>
+        <Form.Control
+          disabled={disabled}
+          onChange={onNameChange}
+          placeholder="e.g. Alice"
+          required
+          type="text"
+          value={user.name}
+        />
+      </Form.Group>
+      <Button disabled={disabled} type="submit" variant="primary">
+        Save
+      </Button>
+    </Form>
   );
 };

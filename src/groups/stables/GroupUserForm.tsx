@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
+import { Col, Form } from "react-bootstrap";
 import { GroupUser } from "../../models/GroupUser";
-import { Button, Input } from "../../share/atoms/FormBaseUis";
+import { Button } from "../../share/atoms/FormBaseUis";
 
 export const GroupUserForm: React.FC<{
   disabled: boolean;
@@ -38,40 +39,40 @@ export const GroupUserForm: React.FC<{
   }, [onSubmit, groupUser]);
 
   return (
-    <form className="GroupUserForm" onSubmit={onFormSubmit}>
-      <p>
-        <label>
-          User ID:
-          <Input
-            disabled={disabled}
-            name="name"
-            onChange={onUserIdInputChange}
-            type="text"
-            value={userId}
-          />
-          <Button disabled={disabled}>Find user</Button>
-        </label>
-      </p>
-      <p>
-        <label>
-          User Name:
-          <Input readOnly type="text" value={groupUser.user.name} />
-          {groupUser.user.id ? "✔" : "✘"}
-        </label>
-      </p>
-      <p>
-        <label>Group Name:</label>
-        <Input readOnly type="text" value={groupUser.group.name} />
-      </p>
-      <p>
-        <Button
-          disabled={disabled || !groupUser.user.id}
-          onClick={onSaveClick}
-          type="button"
-        >
-          {groupUser.id ? "Update" : "Create"}
-        </Button>
-      </p>
-    </form>
+    <Form onSubmit={onFormSubmit}>
+      <Form.Group controlId="userId">
+        <Form.Label>Search user by user ID</Form.Label>
+        <Form.Control
+          onChange={onUserIdInputChange}
+          placeholder="e.g. qOOzPw5eUVHjg6JP9jYj"
+          type="search"
+          value={userId}
+        />
+      </Form.Group>
+      <Button type="submit">Search</Button>
+      <Form.Group as={Form.Row}>
+        <Form.Label column sm={3}>
+          User name
+        </Form.Label>
+        <Col>
+          <Form.Control readOnly value={groupUser.user.name} />
+        </Col>
+      </Form.Group>
+      <Form.Group as={Form.Row}>
+        <Form.Label column sm={3}>
+          Target group name
+        </Form.Label>
+        <Col>
+          <Form.Control readOnly value={groupUser.group.name} />
+        </Col>
+      </Form.Group>
+      <Button
+        disabled={disabled || !groupUser.user.id}
+        onClick={onSaveClick}
+        variant="primary"
+      >
+        {groupUser.id ? "Update" : "Create"}
+      </Button>
+    </Form>
   );
 };

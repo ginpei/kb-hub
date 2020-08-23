@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Col, Form } from "react-bootstrap";
+import { Col, Form, InputGroup } from "react-bootstrap";
 import { GroupUser } from "../../models/GroupUser";
 import { Button } from "../../share/atoms/FormBaseUis";
 
@@ -42,20 +42,35 @@ export const GroupUserForm: React.FC<{
     <Form onSubmit={onFormSubmit}>
       <Form.Group controlId="userId">
         <Form.Label>Search user by user ID</Form.Label>
-        <Form.Control
-          onChange={onUserIdInputChange}
-          placeholder="e.g. qOOzPw5eUVHjg6JP9jYj"
-          type="search"
-          value={userId}
-        />
+        <InputGroup>
+          <Form.Control
+            onChange={onUserIdInputChange}
+            placeholder="e.g. qOOzPw5eUVHjg6JP9jYj"
+            type="search"
+            value={userId}
+          />
+          <InputGroup.Append>
+            <Button type="submit" variant="secondary">
+              Search
+            </Button>
+          </InputGroup.Append>
+        </InputGroup>
       </Form.Group>
-      <Button type="submit">Search</Button>
       <Form.Group as={Form.Row}>
         <Form.Label column sm={3}>
           User name
         </Form.Label>
         <Col>
-          <Form.Control readOnly value={groupUser.user.name} />
+          <InputGroup>
+            <Form.Control readOnly value={groupUser.user.name} />
+            <InputGroup.Append>
+              {groupUser.user.id ? (
+                <InputGroup.Text className="alert-success">✔</InputGroup.Text>
+              ) : (
+                <InputGroup.Text className="alert-secondary">✘</InputGroup.Text>
+              )}
+            </InputGroup.Append>
+          </InputGroup>
         </Col>
       </Form.Group>
       <Form.Group as={Form.Row}>

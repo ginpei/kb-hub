@@ -1,6 +1,6 @@
 import firebase from "firebase/app";
 import React, { useCallback, useMemo, useState } from "react";
-import { Alert } from "react-bootstrap";
+import { Alert, Badge, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { PrivilegesDialog } from "../../groups/composites/PrivilegesDialog";
 import { GroupUserForm } from "../../groups/stables/GroupUserForm";
@@ -19,7 +19,6 @@ import {
 import { createUser, findUserById, User } from "../../models/User";
 import { Button } from "../../share/atoms/FormBaseUis";
 import { BasicLayout } from "../../share/composites/BasicLayout";
-import { Checkbox } from "../../share/stables/FormUis";
 import { ErrorScreen } from "../ErrorScreen";
 import { LoadingScreen } from "../LoadingScreen";
 import { provideGroupPage, useGroupPageContext } from "./GroupPageContext";
@@ -221,17 +220,14 @@ const GUserItem: React.FC<{
 
   return (
     <li>
-      <Checkbox
+      <Form.Check
         checked={selected}
+        id={gUser.user.id}
+        inline
         label={gUser.user.name}
         onChange={onCheckboxChange}
       />
-      {isCurrentUser && (
-        <>
-          {" "}
-          <small style={{ color: "var(--color-moderate-fg)" }}>(You)</small>
-        </>
-      )}
+      {isCurrentUser && <Badge variant="info">You</Badge>}
       <br />
       <small style={{ color: "var(--color-moderate-fg)" }}>
         {"Privileges: "}

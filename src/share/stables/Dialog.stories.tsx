@@ -12,7 +12,7 @@ export const Basic: React.FC = () => {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <div className="ui-container">
+      <div className="container">
         <p>
           <Button onClick={() => setOpen(true)}>Open</Button>
         </p>
@@ -34,7 +34,7 @@ export const TitleAndButtons: React.FC = () => {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <div className="ui-container">
+      <div className="container">
         <p>
           <Button onClick={() => setOpen(true)}>Open</Button>
         </p>
@@ -77,7 +77,7 @@ export const CustomFooter: React.FC = () => {
 
   return (
     <>
-      <div className="ui-container">
+      <div className="container">
         <p>
           <Button onClick={() => setOpen(true)}>Open</Button>
         </p>

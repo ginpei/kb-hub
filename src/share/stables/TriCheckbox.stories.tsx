@@ -41,7 +41,7 @@ export const Basic: React.FC = () => {
   }, []);
 
   return (
-    <div className="ui-container">
+    <div className="container">
       <TriCheckbox checked={c1} id="c1" label="Checked" onChange={onChange1} />
       <TriCheckbox
         checked={c2}
@@ -72,7 +72,7 @@ export const BootstrapCheck: React.FC = () => {
   }, []);
 
   return (
-    <div className="ui-container">
+    <div className="container">
       <Form.Check
         checked={on}
         id="checkbox"

@@ -8,6 +8,7 @@ import {
   knowledgePath,
   saveKnowledge,
 } from "../../../models/Knowledge";
+import { Details } from "../../../share/atoms/Details";
 import { BasicLayout } from "../../../share/composites/BasicLayout";
 import { useGroupPageContext } from "../GroupPageContext";
 import {
@@ -50,10 +51,9 @@ export const KBEditPage: React.FC = provideKnowledgePage(() => {
         onChange={onChange}
         onSubmit={onSubmit}
       />
-      <details>
-        <summary>Preview</summary>
+      <Details summary="Preview!!">
         <NiceMarkdown content={knowledge.content} />
-      </details>
+      </Details>
     </BasicLayout>
   );
 });

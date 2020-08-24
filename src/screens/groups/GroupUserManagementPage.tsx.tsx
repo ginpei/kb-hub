@@ -17,6 +17,7 @@ import {
   useGroupUsers,
 } from "../../models/GroupUser";
 import { createUser, findUserById, User } from "../../models/User";
+import { Details } from "../../share/atoms/Details";
 import { Button } from "../../share/atoms/FormBaseUis";
 import { BasicLayout } from "../../share/composites/BasicLayout";
 import { ErrorScreen } from "../ErrorScreen";
@@ -88,8 +89,7 @@ const NewGroupUserSection: React.FC<{ group: Group }> = ({ group }) => {
   }, [groupUser, group]);
 
   return (
-    <details>
-      <summary>[Admin] Add user</summary>
+    <Details summary="[Admin] Add user">
       {groupUserError && (
         <p style={{ color: "tomato" }}>{groupUserError.message}</p>
       )}
@@ -101,7 +101,7 @@ const NewGroupUserSection: React.FC<{ group: Group }> = ({ group }) => {
         onUserIdChange={onUserIdChange}
         userId={userId}
       />
-    </details>
+    </Details>
   );
 };
 

@@ -75,7 +75,7 @@ export const PrivilegesDialog: React.FC<{
         ))}
       </p>
       <p>
-        <small style={{ color: "var(--color-moderate-fg)" }}>
+        <small className="text-muted">
           {"Assigning to: "}
           {gUsers.map(({ user }) => user.name).join(", ")}
         </small>

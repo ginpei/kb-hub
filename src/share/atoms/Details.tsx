@@ -9,7 +9,10 @@ export const Details: HtmlComponent<
   }
 > = ({ children, className, summary, ...props }) => {
   return (
-    <details {...props} className={jcn(styles.root, className)}>
+    <details
+      {...props}
+      className={jcn(styles.root, "alert-secondary", className)}
+    >
       <summary className={styles.summary}>{summary}</summary>
       {children}
     </details>

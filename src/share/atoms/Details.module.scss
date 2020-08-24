@@ -2,9 +2,8 @@
 @import "~bootstrap/scss/variables";
 
 .root {
-  background-color: var(--color-moderate-bg);
   border-radius: var(--border-radius);
-  border: solid 1px var(--color-moderate-fg);
+  border: solid 1px var(--secondary);
   margin-bottom: var(--padding-base);
   padding: 0 var(--padding-base);
 }
@@ -15,6 +14,6 @@
   padding: var(--padding-half) var(--padding-base);
 
   .root[open] & {
-    border-bottom: solid 1px var(--color-moderate-fg);
+    border-bottom: solid 1px var(--secondary);
   }
 }

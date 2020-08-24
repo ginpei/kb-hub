@@ -55,7 +55,10 @@ export const DialogButtonFooter: React.FC<HtmlProps<"div">> = ({
   ...props
 }) => {
   return (
-    <div className={jcn(styles.DialogButtonFooter, className)} {...props} />
+    <div
+      className={jcn(styles.DialogButtonFooter, "alert-secondary", className)}
+      {...props}
+    />
   );
 };
 

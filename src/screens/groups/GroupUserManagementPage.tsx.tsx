@@ -229,7 +229,7 @@ const GUserItem: React.FC<{
       />
       {isCurrentUser && <Badge variant="info">You</Badge>}
       <br />
-      <small style={{ color: "var(--color-moderate-fg)" }}>
+      <small className="text-muted">
         {"Privileges: "}
         {gUser.privileges
           .map((privilege) => privilegeToLabel(privilege))

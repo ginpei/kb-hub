@@ -66,7 +66,7 @@ export const PrivilegesDialog: React.FC<{
       <p>
         {pFlags.map(([privilege, flag]) => (
           <TriCheckbox
-            checked={!!flag}
+            checked={flag}
             key={privilege}
             label={privilegeToLabel(privilege)}
             name={privilege}

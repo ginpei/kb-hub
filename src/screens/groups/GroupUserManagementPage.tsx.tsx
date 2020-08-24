@@ -1,8 +1,10 @@
 import firebase from "firebase/app";
 import React, { useCallback, useMemo, useState } from "react";
+import { Alert, Badge, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { PrivilegesDialog } from "../../groups/composites/PrivilegesDialog";
 import { GroupUserForm } from "../../groups/stables/GroupUserForm";
+import { sleep } from "../../misc/misc";
 import { useCurrentUserContext } from "../../models/CurrentUserProvider";
 import { Group, groupPath } from "../../models/Group";
 import {
@@ -11,18 +13,15 @@ import {
   PrivilegeFlags,
   privilegeToLabel,
   saveGroupUser,
-  useGroupUsers,
   updatePrivileges,
+  useGroupUsers,
 } from "../../models/GroupUser";
 import { createUser, findUserById, User } from "../../models/User";
 import { Button } from "../../share/atoms/FormBaseUis";
 import { BasicLayout } from "../../share/composites/BasicLayout";
-import { Checkbox } from "../../share/stables/FormUis";
 import { ErrorScreen } from "../ErrorScreen";
 import { LoadingScreen } from "../LoadingScreen";
 import { provideGroupPage, useGroupPageContext } from "./GroupPageContext";
-import { sleep } from "../../misc/misc";
-import { SuccessMessage, InfoMessage } from "../../share/atoms/Message";
 
 const fs = firebase.firestore();
 
@@ -177,20 +176,16 @@ const GroupUserListSection: React.FC<{ gUsers: GroupUser[]; user: User }> = ({
         <Button disabled={selectedIds.length < 1}>Delete</Button>
       </p>
       {saveSucceeded && (
-        <SuccessMessage>
-          {/* TODO prepare .btn-link */}
-          <span
-            className="btn-link"
-            onClick={onCloseSaveSucceedMessageClick}
-            style={{ cursor: "pointer", float: "right" }}
-          >
-            ×
-          </span>
+        <Alert
+          dismissible
+          onClose={onCloseSaveSucceedMessageClick}
+          variant="success"
+        >
           Saved.
-        </SuccessMessage>
+        </Alert>
       )}
       {saving ? (
-        <InfoMessage>Saving...</InfoMessage>
+        <Alert variant="primary">Saving...</Alert>
       ) : (
         <ul>
           {gUsers.map((gUser) => (
@@ -225,17 +220,14 @@ const GUserItem: React.FC<{
 
   return (
     <li>
-      <Checkbox
+      <Form.Check
         checked={selected}
+        id={gUser.user.id}
+        inline
         label={gUser.user.name}
         onChange={onCheckboxChange}
       />
-      {isCurrentUser && (
-        <>
-          {" "}
-          <small style={{ color: "var(--color-moderate-fg)" }}>(You)</small>
-        </>
-      )}
+      {isCurrentUser && <Badge variant="info">You</Badge>}
       <br />
       <small style={{ color: "var(--color-moderate-fg)" }}>
         {"Privileges: "}

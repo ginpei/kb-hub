@@ -20,13 +20,13 @@ export const BasicLayout: React.FC<BasicLayoutProps> = ({
   return (
     <div className="BasicLayout">
       <div className={styles.header}>
-        <div className="headerInner ui-container">
+        <div className="headerInner container">
           <Link to="/">Knowledge Base Hub</Link>
         </div>
       </div>
-      <div className={jcn(styles.main, "ui-container")}>{children}</div>
+      <div className={jcn(styles.main, "container")}>{children}</div>
       <div className={styles.footer}>
-        <div className="footerInner ui-container">Footer</div>
+        <div className="footerInner container">Footer</div>
       </div>
     </div>
   );

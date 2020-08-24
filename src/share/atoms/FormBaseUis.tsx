@@ -1,4 +1,5 @@
 import React, { useCallback } from "react";
+import * as bs from "react-bootstrap";
 import { HtmlComponent, jcn } from "../../misc/misc";
 import styles from "./FormBaseUis.module.scss";
 
@@ -6,21 +7,13 @@ interface CommonFormInterface {
   ambiguous?: boolean;
 }
 
-export const Button: HtmlComponent<
-  "button",
-  {
-    kind?: "primary" | "normal";
-  }
-> = (props) => {
-  const { className, kind, ...restProps } = props;
-
-  return (
-    <button
-      {...restProps}
-      className={`${styles.Button} ${className}`}
-      data-kind={kind}
-    />
-  );
+// for this, `bs.Button` type may work in the future
+// https://stackoverflow.com/questions/63533844
+export const Button: React.FC<bs.ButtonProps> = ({
+  variant = "outline-secondary",
+  ...props
+}) => {
+  return <bs.Button variant={variant} {...props} />;
 };
 
 export const Input: HtmlComponent<"input", CommonFormInterface> = (props) => {

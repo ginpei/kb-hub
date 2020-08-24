@@ -6,10 +6,7 @@ import {
   privilegeToLabel,
 } from "../../models/GroupUser";
 import { Dialog, DialogButtonDescription } from "../../share/stables/Dialog";
-import {
-  OnTriCheckboxChange,
-  TriCheckbox,
-} from "../../share/stables/TriCheckbox";
+import { TriCheckbox } from "../../share/stables/TriCheckbox";
 
 export const PrivilegesDialog: React.FC<{
   gUsers: GroupUser[];
@@ -41,9 +38,9 @@ export const PrivilegesDialog: React.FC<{
     onOk(null);
   }, [onOk]);
 
-  const onCheckboxChange: OnTriCheckboxChange = useCallback(
-    (event, checked) => {
-      const privilege = event.currentTarget.name;
+  const onCheckboxChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { checked, name: privilege } = event.currentTarget;
       const pair = pFlags.find(([v]) => v === privilege);
       if (!pair) {
         throw new Error(`Unknown privilege tag "${privilege}"`);
@@ -69,7 +66,7 @@ export const PrivilegesDialog: React.FC<{
       <p>
         {pFlags.map(([privilege, flag]) => (
           <TriCheckbox
-            checked={flag}
+            checked={!!flag}
             key={privilege}
             label={privilegeToLabel(privilege)}
             name={privilege}

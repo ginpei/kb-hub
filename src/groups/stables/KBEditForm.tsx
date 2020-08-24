@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
+import { Form } from "react-bootstrap";
 import { Knowledge } from "../../models/Knowledge";
-import { Button, Input, Textarea } from "../../share/atoms/FormBaseUis";
+import { Button } from "../../share/atoms/FormBaseUis";
 
 export const KBEditForm: React.FC<{
   disabled: boolean;
@@ -25,36 +26,31 @@ export const KBEditForm: React.FC<{
   );
 
   return (
-    <form className="KBEditForm" onSubmit={onFormSubmit}>
-      <p>
-        <label>
-          Title:
-          <Input
-            disabled={disabled}
-            name="title"
-            onChange={onTextChange}
-            type="text"
-            value={knowledge.title}
-          />
-        </label>
-      </p>
-      <p>
-        <label>
-          Content:
-          <br />
-          <Textarea
-            disabled={disabled}
-            name="content"
-            onChange={onTextChange}
-            value={knowledge.content}
-          />
-        </label>
-      </p>
-      <p>
-        <Button disabled={disabled}>
-          {knowledge.id ? "Update" : "Create"}
-        </Button>
-      </p>
-    </form>
+    <Form onSubmit={onFormSubmit}>
+      <Form.Group controlId="title">
+        <Form.Label>Title</Form.Label>
+        <Form.Control
+          disabled={disabled}
+          name="title"
+          onChange={onTextChange}
+          type="text"
+          value={knowledge.title}
+        />
+      </Form.Group>
+      <Form.Group controlId="content">
+        <Form.Label>Content</Form.Label>
+        <Form.Control
+          as="textarea"
+          disabled={disabled}
+          name="content"
+          onChange={onTextChange}
+          type="text"
+          value={knowledge.content}
+        />
+      </Form.Group>
+      <Button disabled={disabled} type="submit" variant="primary">
+        {knowledge.id ? "Update" : "Create"}
+      </Button>
+    </Form>
   );
 };

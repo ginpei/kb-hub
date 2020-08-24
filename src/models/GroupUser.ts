@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { TriState } from "../share/stables/TriCheckbox";
 import { createDataRecord, DataRecord, updateTimestamp } from "./DataRecord";
 import { createGroup, docToGroup, Group, getGroupDoc } from "./Group";
 import { createUser, getUserDoc, User, ssToUser } from "./User";
@@ -20,7 +21,7 @@ export type GroupUserPrivilege = typeof GroupUserPrivilege[number];
  * The second value becomes `null` if some of group users are `true` while the
  * others are `false`.
  */
-export type PrivilegeFlags = [GroupUserPrivilege, boolean | null];
+export type PrivilegeFlags = [GroupUserPrivilege, TriState];
 
 export const GroupUserPrivilege = ["login", "userManagement"] as const;
 

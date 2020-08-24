@@ -63,17 +63,16 @@ export const PrivilegesDialog: React.FC<{
       onRequestClose={onRequestClose}
       title="Update user privileges"
     >
-      <p>
-        {pFlags.map(([privilege, flag]) => (
-          <TriCheckbox
-            checked={flag}
-            key={privilege}
-            label={privilegeToLabel(privilege)}
-            name={privilege}
-            onChange={onCheckboxChange}
-          />
-        ))}
-      </p>
+      {pFlags.map(([privilege, flag]) => (
+        <TriCheckbox
+          checked={flag}
+          id={privilege}
+          key={privilege}
+          label={privilegeToLabel(privilege)}
+          name={privilege}
+          onChange={onCheckboxChange}
+        />
+      ))}
       <p>
         <small className="text-muted">
           {"Assigning to: "}

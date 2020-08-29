@@ -1,7 +1,15 @@
+import firebase from "firebase/app";
 import React from "react";
+import { Alert, Spinner } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { Group, groupPath } from "../models/Group";
+import { useUserGroups } from "../models/GroupUser";
+import { knowledgePath, useLatestKnowledges } from "../models/Knowledge";
+import { useCurrentUser } from "../models/User";
 import { BasicLayout } from "../share/composites/BasicLayout";
-import { groupPath } from "../models/Group";
+
+const auth = firebase.auth();
+const fs = firebase.firestore();
 
 export const HomePage: React.FC = () => {
   return (
@@ -21,6 +29,72 @@ export const HomePage: React.FC = () => {
           <Link to="/login">Login</Link>
         </li>
       </ul>
+      <RecentKnowledgeSection />
     </BasicLayout>
+  );
+};
+
+const RecentKnowledgeSection: React.FC = () => {
+  const [user, userReady, userError] = useCurrentUser(auth, fs);
+  const [groups, groupsReady, groupsError] = useUserGroups(fs, user);
+
+  const h2 = <h2>Recent Knowledge</h2>;
+
+  if (!userReady || !groupsReady) {
+    return (
+      <div>
+        {h2}
+        <Spinner animation="grow" size="sm" role="status" />
+      </div>
+    );
+  }
+
+  const error = userError || groupsError;
+  if (error) {
+    return (
+      <div>
+        {h2}
+        <Alert variant="danger">Error: {error.message}</Alert>
+      </div>
+    );
+  }
+
+  return (
+    <div className="RecentKnowledgeSection">
+      {h2}
+      {groups.map((group) => (
+        <RecentGroupKnowledges group={group} key={group.id} />
+      ))}
+    </div>
+  );
+};
+
+const RecentGroupKnowledges: React.FC<{ group: Group }> = ({ group }) => {
+  const [knowledges, knowledgesReady, knowledgesError] = useLatestKnowledges(
+    fs,
+    group
+  );
+
+  if (!knowledgesReady) {
+    return <Spinner animation="grow" size="sm" role="status" />;
+  }
+
+  if (knowledgesError) {
+    return <Alert variant="danger">Error: {knowledgesError.message}</Alert>;
+  }
+
+  return (
+    <section>
+      <h3>{group.name}</h3>
+      <ul className="RecentGroupKnowledges">
+        {knowledges.map((knowledge) => (
+          <li key={knowledge.id}>
+            <Link to={knowledgePath("view", group, knowledge)}>
+              {knowledge.title}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 };

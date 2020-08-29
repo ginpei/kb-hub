@@ -9,6 +9,11 @@
   }
 }
 
+.headerInner {
+  display: flex;
+  justify-content: space-between;
+}
+
 .main {
   min-height: 50vh;
 }

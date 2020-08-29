@@ -27,6 +27,12 @@ export const UserForm: React.FC<{
 
   return (
     <Form onSubmit={onFormSubmit}>
+      {user.id && (
+        <Form.Group>
+          <Form.Label>ID</Form.Label>
+          <Form.Control readOnly type="text" value={user.id} />
+        </Form.Group>
+      )}
       <Form.Group controlId="name">
         <Form.Label>Name</Form.Label>
         <Form.Control

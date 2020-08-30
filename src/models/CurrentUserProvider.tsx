@@ -1,11 +1,10 @@
 import firebase from "firebase/app";
 import React, { createContext, useContext } from "react";
-import { useCurrentUser, User } from "./User";
 import { ErrorScreen } from "../screens/ErrorScreen";
 import { LoadingScreen } from "../screens/LoadingScreen";
-import { LoginScreen } from "../screens/LoginScreen";
+import { useCurrentUser, User } from "./User";
 
-const CurrentUserContext = createContext<User>({} as User);
+const CurrentUserContext = createContext<User | null>({} as User);
 
 export const CurrentUserProvider: React.FC<{
   auth: firebase.auth.Auth;
@@ -15,10 +14,6 @@ export const CurrentUserProvider: React.FC<{
 
   if (!userReady) {
     return <LoadingScreen />;
-  }
-
-  if (!user) {
-    return <LoginScreen />;
   }
 
   if (userError) {
@@ -32,6 +27,6 @@ export const CurrentUserProvider: React.FC<{
   );
 };
 
-export const useCurrentUserContext = (): User => {
+export const useCurrentUserContext = (): User | null => {
   return useContext(CurrentUserContext);
 };

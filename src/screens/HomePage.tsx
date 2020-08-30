@@ -2,6 +2,7 @@ import firebase from "firebase/app";
 import React from "react";
 import { Alert, Spinner } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { useCurrentUserContext } from "../models/CurrentUserProvider";
 import { Group, groupPath } from "../models/Group";
 import { useUserGroups } from "../models/GroupUser";
 import { knowledgePath, useLatestKnowledges } from "../models/Knowledge";
@@ -12,6 +13,8 @@ const auth = firebase.auth();
 const fs = firebase.firestore();
 
 export const HomePage: React.FC = () => {
+  const user = useCurrentUserContext();
+
   return (
     <BasicLayout>
       <h1>Knowledge Base Hub</h1>
@@ -29,7 +32,7 @@ export const HomePage: React.FC = () => {
           <Link to="/login">Login</Link>
         </li>
       </ul>
-      <RecentKnowledgeSection />
+      {user && <RecentKnowledgeSection />}
     </BasicLayout>
   );
 };

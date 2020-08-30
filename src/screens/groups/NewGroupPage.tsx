@@ -1,13 +1,16 @@
 import firebase from "firebase/app";
 import React, { useCallback, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { BasicLayout } from "../../share/composites/BasicLayout";
-import { createGroup, Group, groupPath, saveGroup } from "../../models/Group";
 import { GroupForm } from "../../groups/stables/GroupForm";
+import { useCurrentUserContext } from "../../models/CurrentUserProvider";
+import { createGroup, Group, groupPath, saveGroup } from "../../models/Group";
+import { BasicLayout } from "../../share/composites/BasicLayout";
+import { LoginScreen } from "../LoginScreen";
 
 const fs = firebase.firestore();
 
 export const NewGroupPage: React.FC = () => {
+  const user = useCurrentUserContext();
   const [group, setGroup] = useState(createGroup());
   const [saving, setSaving] = useState(false);
   const history = useHistory();
@@ -25,6 +28,10 @@ export const NewGroupPage: React.FC = () => {
     setSaving(false);
     history.push(groupPath("view", savedGroup));
   }, [group, history]);
+
+  if (!user) {
+    return <LoginScreen />;
+  }
 
   return (
     <BasicLayout title="New group">

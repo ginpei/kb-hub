@@ -22,6 +22,7 @@ import { Button } from "../../share/atoms/FormBaseUis";
 import { BasicLayout } from "../../share/composites/BasicLayout";
 import { ErrorScreen } from "../ErrorScreen";
 import { LoadingScreen } from "../LoadingScreen";
+import { LoginScreen } from "../LoginScreen";
 import { provideGroupPage, useGroupPageContext } from "./GroupPageContext";
 
 const fs = firebase.firestore();
@@ -32,6 +33,10 @@ export const GroupUserManagementPage: React.FC = provideGroupPage(() => {
   const [gUsers, usersReady, usersError] = useGroupUsers(fs, group);
 
   const isAdmin = useMemo(() => {
+    if (!user) {
+      return false;
+    }
+
     const loggedInGUser = gUsers.find((v) => v.user.id === user.id);
     return loggedInGUser?.privileges.includes("userManagement") ?? false;
   }, [user, gUsers]);
@@ -42,6 +47,10 @@ export const GroupUserManagementPage: React.FC = provideGroupPage(() => {
 
   if (usersError) {
     return <ErrorScreen error={usersError} />;
+  }
+
+  if (!user) {
+    return <LoginScreen />;
   }
 
   return (

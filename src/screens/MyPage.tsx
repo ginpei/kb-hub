@@ -5,6 +5,7 @@ import { UserForm } from "../groups/stables/UserForm";
 import { useCurrentUserContext } from "../models/CurrentUserProvider";
 import { saveUser, User } from "../models/User";
 import { BasicLayout } from "../share/composites/BasicLayout";
+import { LoginScreen } from "./LoginScreen";
 
 const fs = firebase.firestore();
 
@@ -15,16 +16,28 @@ export const MyPage: React.FC = () => {
 
   const onChange = useCallback(
     (values: Partial<User>) => {
+      if (!user) {
+        return;
+      }
+
       setUser({ ...user, ...values });
     },
     [user]
   );
 
   const onSubmit = useCallback(async () => {
+    if (!user) {
+      return;
+    }
+
     setSaving(true);
     await saveUser(fs, user);
     setSaving(false);
   }, [user]);
+
+  if (!user || !initial) {
+    return <LoginScreen />;
+  }
 
   return (
     <BasicLayout title="MyPage">

@@ -88,7 +88,9 @@ const RecentGroupKnowledges: React.FC<{ group: Group }> = ({ group }) => {
 
   return (
     <section>
-      <h3>{group.name}</h3>
+      <h3>
+        <Link to={groupPath("view", group)}>{group.name}</Link>
+      </h3>
       <ul className="RecentGroupKnowledges">
         {knowledges.map((knowledge) => (
           <li key={knowledge.id}>

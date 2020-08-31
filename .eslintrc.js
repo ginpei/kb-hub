@@ -29,7 +29,7 @@ module.exports = {
     "import/extensions": ["error", "never"],
     "import/no-extraneous-dependencies": [
       "error",
-      { devDependencies: ["**/*.test.{ts,tsx}"] },
+      { devDependencies: ["**/*.test.{ts,tsx}", "src/misc/firestore-test.ts"] },
     ],
     "import/prefer-default-export": "off",
     "no-use-before-define": "off",

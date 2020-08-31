@@ -1,18 +1,20 @@
 import * as firebase from "@firebase/testing";
 import { describeIfEmulatorUp } from "../firestoreTesting";
+import {
+  cleanUpFirestore,
+  prepareAdminFirestore,
+  prepareFirestore,
+} from "../misc/firestore-test";
 import { createGroup, Group } from "./Group";
 import { createGroupUser } from "./GroupUser";
 
 describe("Group", () => {
   describeIfEmulatorUp("rules", () => {
-    const projectId = "my-test-project";
     let fs: firebase.firestore.Firestore;
-    let afs: firebase.firestore.Firestore;
     let aColl: ReturnType<typeof fs["collection"]>;
 
     beforeAll(() => {
-      const adminApp = firebase.initializeAdminApp({ projectId });
-      afs = adminApp.firestore();
+      const afs = prepareAdminFirestore();
       aColl = afs.collection("groups");
     });
 
@@ -50,17 +52,6 @@ describe("Group", () => {
         ).rejects.toThrow();
       });
     });
-
-    function prepareFirestore(uid: string | undefined) {
-      const auth = uid ? { uid } : undefined;
-      const app = firebase.initializeTestApp({ projectId, auth });
-      const firestore = app.firestore();
-      return firestore;
-    }
-
-    function cleanUpFirestore() {
-      return firebase.clearFirestoreData({ projectId });
-    }
 
     async function createGroupDoc(initial: Partial<Group>) {
       if (!initial.id) {

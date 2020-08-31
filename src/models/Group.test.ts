@@ -24,7 +24,7 @@ describe("Group", () => {
       });
 
       afterAll(async () => {
-        await firebase.clearFirestoreData({ projectId });
+        await cleanUpFirestore();
       });
 
       it("can access", async () => {
@@ -41,7 +41,7 @@ describe("Group", () => {
       });
 
       afterAll(async () => {
-        await firebase.clearFirestoreData({ projectId });
+        await cleanUpFirestore();
       });
 
       it("cannot access", () => {
@@ -56,6 +56,10 @@ describe("Group", () => {
       const app = firebase.initializeTestApp({ projectId, auth });
       const firestore = app.firestore();
       return firestore;
+    }
+
+    function cleanUpFirestore() {
+      return firebase.clearFirestoreData({ projectId });
     }
 
     async function createGroupDoc(initial: Partial<Group>) {

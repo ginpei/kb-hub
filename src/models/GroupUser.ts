@@ -139,6 +139,16 @@ export async function saveGroupUser(
   };
 }
 
+export async function deleteGroupUser(
+  fs: firebase.firestore.Firestore,
+  groupUser: GroupUser | string
+): Promise<void> {
+  const coll = getCollection(fs);
+
+  const id = typeof groupUser === "string" ? groupUser : groupUser.id;
+  await coll.doc(id).delete();
+}
+
 export function updatePrivileges(
   groupUser: GroupUser,
   pFlags: PrivilegeFlags[]

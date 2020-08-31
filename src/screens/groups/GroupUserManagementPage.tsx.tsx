@@ -9,6 +9,7 @@ import { useCurrentUserContext } from "../../models/CurrentUserProvider";
 import { Group, groupPath } from "../../models/Group";
 import {
   createGroupUser,
+  deleteGroupUser,
   GroupUser,
   PrivilegeFlags,
   privilegeToLabel,
@@ -20,6 +21,11 @@ import { createUser, findUserById, User } from "../../models/User";
 import { Details } from "../../share/atoms/Details";
 import { Button } from "../../share/atoms/FormBaseUis";
 import { BasicLayout } from "../../share/composites/BasicLayout";
+import {
+  OkCancelCallback,
+  OkCancelDialog,
+} from "../../share/stables/OkCancelDialog";
+import { OkDialog } from "../../share/stables/OkDialog";
 import { ErrorScreen } from "../ErrorScreen";
 import { LoadingScreen } from "../LoadingScreen";
 import { LoginScreen } from "../LoginScreen";
@@ -121,13 +127,26 @@ const GroupUserListSection: React.FC<{ gUsers: GroupUser[]; user: User }> = ({
   const [saving, setSaving] = useState(false);
   const [saveSucceeded, setSaveSucceeded] = useState(false);
   const [managingPrivileges, setManagingPrivileges] = useState(false);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [deleteOwnOpen, setDeleteOwnOpen] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [selectedGUsers, setSelectedGUsers] = useState<GroupUser[]>([]);
+
+  const selectedGUsers: GroupUser[] = useMemo(() => {
+    return gUsers.filter((v) => selectedIds.includes(v.id));
+  }, [gUsers, selectedIds]);
 
   const onManagePrivilegesClick = useCallback(() => {
-    setSelectedGUsers(gUsers.filter((v) => selectedIds.includes(v.id)));
     setManagingPrivileges(true);
-  }, [gUsers, selectedIds]);
+  }, []);
+
+  const onDeleteClick = useCallback(async () => {
+    if (selectedGUsers.some((v) => v.user.id === user.id)) {
+      setDeleteOwnOpen(true);
+      return;
+    }
+
+    setDeleteConfirmOpen(true);
+  }, [selectedGUsers, user]);
 
   const onCloseSaveSucceedMessageClick = useCallback(() => {
     setSaveSucceeded(false);
@@ -172,6 +191,23 @@ const GroupUserListSection: React.FC<{ gUsers: GroupUser[]; user: User }> = ({
     [selectedGUsers]
   );
 
+  const onDeleteOwnClose = useCallback(() => {
+    setDeleteOwnOpen(false);
+  }, []);
+
+  const onDeleteClose: OkCancelCallback = useCallback(
+    async (result) => {
+      if (result) {
+        setSaving(true);
+        await Promise.all(selectedIds.map((v) => deleteGroupUser(fs, v)));
+        setSaving(false);
+      }
+
+      setDeleteConfirmOpen(false);
+    },
+    [selectedIds]
+  );
+
   return (
     <section className="GroupUserListSection">
       <p>
@@ -182,7 +218,9 @@ const GroupUserListSection: React.FC<{ gUsers: GroupUser[]; user: User }> = ({
           Manage privileges...
         </Button>
         <Button disabled={selectedIds.length < 1}>Suspend</Button>
-        <Button disabled={selectedIds.length < 1}>Delete</Button>
+        <Button disabled={selectedIds.length < 1} onClick={onDeleteClick}>
+          Delete
+        </Button>
       </p>
       {saveSucceeded && (
         <Alert
@@ -213,6 +251,21 @@ const GroupUserListSection: React.FC<{ gUsers: GroupUser[]; user: User }> = ({
         isOpen={managingPrivileges}
         onOk={onDialogClose}
       />
+      <OkDialog isOpen={deleteOwnOpen} onOk={onDeleteOwnClose}>
+        <p>You cannot delete your own access.</p>
+      </OkDialog>
+      <OkCancelDialog isOpen={deleteConfirmOpen} onOk={onDeleteClose}>
+        <>
+          <p>
+            Are you sure you want to delete access from the following user(s)?
+          </p>
+          <ul>
+            {selectedGUsers.map((gUser) => (
+              <li key={gUser.id}>{gUser.user.name}</li>
+            ))}
+          </ul>
+        </>
+      </OkCancelDialog>
     </section>
   );
 };
@@ -231,7 +284,7 @@ const GUserItem: React.FC<{
     <li>
       <Form.Check
         checked={selected}
-        id={gUser.user.id}
+        id={gUser.id}
         inline
         label={gUser.user.name}
         onChange={onCheckboxChange}

@@ -99,14 +99,19 @@ export function useGroupUsers(
 
     const docGroup = getGroupDoc(fs, group);
     const coll = getCollection(fs).where("group", "==", docGroup);
-    coll
-      .get()
-      .then((ss) => Promise.all(ss.docs.map((v) => docToResolvedGroupUser(v))))
-      .then((newUsers) => {
+    coll.onSnapshot({
+      error(e) {
+        setError(e);
+        setReady(true);
+      },
+      async next(ss) {
+        const newUsers = await Promise.all(
+          ss.docs.map((v) => docToResolvedGroupUser(v))
+        );
         setUsers(newUsers);
-      })
-      .catch((e) => setError(e))
-      .finally(() => setReady(true));
+        setReady(true);
+      },
+    });
   }, [fs, group]);
 
   return [users, ready, error];

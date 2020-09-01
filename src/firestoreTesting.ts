@@ -6,8 +6,18 @@ import "firebase/firestore";
  *
  * To activate, set `FB_EMULATOR` env var.
  *
+ * For CI, you can use `exec`:
+ *
  * ```console
  * npx firebase emulators:exec "FB_EMULATOR=true CI=true npm test"
+ * ```
+ *
+ * For local, execute tests while emulator is running, and restart emu when you
+ * update rules:
+ *
+ * ```console
+ * npx firebase emulators:start --only firestore &
+ * FB_EMULATOR=1 npm test
  * ```
  */
 export const describeIfEmulatorUp: jest.Describe = process.env.FB_EMULATOR

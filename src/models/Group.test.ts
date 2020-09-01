@@ -1,32 +1,21 @@
-import * as firebase from "@firebase/testing";
 import { describeIfEmulatorUp } from "../firestoreTesting";
-import {
-  cleanUpFirestore,
-  prepareAdminFirestore,
-  prepareFirestore,
-} from "../misc/firestore-test";
+import { FirestoreEmu, prepareFirestore } from "../misc/firestore-test";
 import { createGroup, Group } from "./Group";
 import { createGroupUser } from "./GroupUser";
 
 describe("Group", () => {
   describeIfEmulatorUp("rules", () => {
-    let fs: firebase.firestore.Firestore;
-    let aColl: ReturnType<typeof fs["collection"]>;
-
-    beforeAll(() => {
-      const afs = prepareAdminFirestore();
-      aColl = afs.collection("groups");
-    });
+    let fs: FirestoreEmu;
 
     describe("participant user", () => {
-      beforeAll(async () => {
+      beforeEach(async () => {
         fs = prepareFirestore("user-1");
 
         await createGroupDoc({ id: "group-1", name: "Group 1" });
       });
 
-      afterAll(async () => {
-        await cleanUpFirestore();
+      afterEach(async () => {
+        await fs.cleanUp();
       });
 
       it("can access", async () => {
@@ -36,14 +25,14 @@ describe("Group", () => {
     });
 
     describe("non-login user", () => {
-      beforeAll(async () => {
+      beforeEach(async () => {
         fs = prepareFirestore(undefined);
 
         await createGroupDoc({ id: "group-1", name: "Group 1" });
       });
 
-      afterAll(async () => {
-        await cleanUpFirestore();
+      afterEach(async () => {
+        await fs.cleanUp();
       });
 
       it("cannot access", () => {
@@ -59,7 +48,7 @@ describe("Group", () => {
       }
 
       const group = createGroup(initial);
-      const doc = aColl.doc(group.id);
+      const doc = fs.admin.collection("groups").doc(group.id);
       await doc.set(group);
       await doc.collection("users").add(createGroupUser());
       return doc;

@@ -1,31 +1,20 @@
-import * as firebase from "@firebase/testing";
 import { describeIfEmulatorUp } from "../firestoreTesting";
-import {
-  cleanUpFirestore,
-  prepareAdminFirestore,
-  prepareFirestore,
-} from "../misc/firestore-test";
+import { FirestoreEmu, prepareFirestore } from "../misc/firestore-test";
 import { createUser, ssToUser, User } from "./User";
 
 describe("User", () => {
   describeIfEmulatorUp("rules", () => {
-    let fs: firebase.firestore.Firestore;
-    let aColl: ReturnType<typeof fs["collection"]>;
-
-    beforeAll(() => {
-      const afs = prepareAdminFirestore();
-      aColl = afs.collection("users");
-    });
+    let fs: FirestoreEmu;
 
     describe("user own self", () => {
-      beforeAll(async () => {
+      beforeEach(async () => {
         fs = prepareFirestore("user-1");
 
         await createUserDoc({ id: "user-1", name: "User 1" });
       });
 
-      afterAll(async () => {
-        await cleanUpFirestore();
+      afterEach(async () => {
+        await fs.cleanUp();
       });
 
       it("can read", async () => {
@@ -43,14 +32,14 @@ describe("User", () => {
     });
 
     describe("another user", () => {
-      beforeAll(async () => {
+      beforeEach(async () => {
         fs = prepareFirestore("user-2");
 
         await createUserDoc({ id: "user-1", name: "User 1" });
       });
 
-      afterAll(async () => {
-        await cleanUpFirestore();
+      afterEach(async () => {
+        await fs.cleanUp();
       });
 
       it("can read", async () => {
@@ -68,14 +57,14 @@ describe("User", () => {
     });
 
     describe("non-login user", () => {
-      beforeAll(async () => {
+      beforeEach(async () => {
         fs = prepareFirestore(undefined);
 
         await createUserDoc({ id: "user-1", name: "User 1" });
       });
 
-      afterAll(async () => {
-        await cleanUpFirestore();
+      afterEach(async () => {
+        await fs.cleanUp();
       });
 
       it("cannot read", async () => {
@@ -97,7 +86,7 @@ describe("User", () => {
       }
 
       const user = createUser(initial);
-      const doc = aColl.doc(user.id);
+      const doc = fs.admin.collection("users").doc(user.id);
       await doc.set(user);
       return doc;
     }

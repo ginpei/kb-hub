@@ -5,7 +5,11 @@ service cloud.firestore {
       allow read, write: if false;
     }
     match /groups/{id} {
-      allow read, write: if request.auth.uid != null;
+      function isParticipant() {
+        return exists(/databases/$(database)/documents/groups/$(id)/users/$(request.auth.uid))
+      }
+
+      allow read, write: if request.auth.uid != null && isParticipant();
     }
     match /groupUsers/{id} {
       allow read, write: if request.auth.uid != null;

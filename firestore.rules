@@ -5,11 +5,25 @@ service cloud.firestore {
       allow read, write: if false;
     }
     match /groups/{id} {
-      function isParticipant() {
-        return exists(/databases/$(database)/documents/groups/$(id)/users/$(request.auth.uid))
+      function isParticipant(userId) {
+        return exists(
+          /databases/$(database)/documents/groups/$(id)/users/$(userId)
+        )
       }
 
-      allow read, write: if request.auth.uid != null && isParticipant();
+      function isManager(userId) {
+        let user = get(
+          /databases/$(database)/documents/groups/$(id)/users/$(userId)
+        );
+        return user.data.groupManager;
+      }
+
+      allow read: if isParticipant(request.auth.uid);
+      allow write: if isManager(request.auth.uid);
+
+      match /users/{userId} {
+        allow read, write: if isManager(request.auth.uid);
+      }
     }
     match /groupUsers/{id} {
       allow read, write: if request.auth.uid != null;

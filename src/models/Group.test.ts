@@ -95,20 +95,18 @@ describe("Group", () => {
     // TODO fix user data handling
     async function createGroupUserDoc(
       groupId: string,
-      initial: Partial<GroupUser>
+      initial: { id: string }
+      // initial: Partial<GroupUser>
     ) {
-      const user = createUser({ id: "user-1" });
-      const groupUser = createGroupUser({
-        id: user.id,
-        privileges: ["login", "userManagement"],
-        user,
-      });
+      const user = createUser({ id: initial.id });
       const doc = await fs.admin
         .collection("groups")
         .doc(groupId)
         .collection("users")
-        .doc(groupUser.id)
-        .set(groupUser);
+        .doc(initial.id)
+        .set({
+          groupManager: true,
+        });
 
       return doc;
     }

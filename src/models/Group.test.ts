@@ -1,19 +1,25 @@
 import { describeIfEmulatorUp } from "../firestoreTesting";
 import { FirestoreEmu, prepareFirestore } from "../misc/firestore-test";
 import { createGroup, Group } from "./Group";
-import { createGroupUser, GroupUser } from "./GroupUser";
-import { createUser } from "./User";
+import { GroupPrivileges } from "./GroupUser";
 
 describe("Group", () => {
   describeIfEmulatorUp("rules", () => {
     let fs: FirestoreEmu;
 
-    describe("participant user", () => {
+    describe("group manager", () => {
       beforeEach(async () => {
         fs = prepareFirestore("user-1");
 
         await createGroupDoc({ id: "group-1", name: "Group 1" });
-        await createGroupUserDoc("group-1", { id: "user-1" });
+        await createGroupUserDoc({
+          groupId: "group-1",
+          privileges: {
+            groupManagement: true,
+            login: true,
+          },
+          userId: "user-1",
+        });
       });
 
       afterEach(async () => {
@@ -36,31 +42,48 @@ describe("Group", () => {
       });
     });
 
-    describe("non-login user", () => {
+    describe("participant", () => {
       beforeEach(async () => {
-        fs = prepareFirestore(undefined);
+        fs = prepareFirestore("user-1");
 
         await createGroupDoc({ id: "group-1", name: "Group 1" });
-        await createGroupUserDoc("group-1", { id: "user-1" });
+        await createGroupUserDoc({
+          groupId: "group-1",
+          privileges: {
+            login: true,
+          },
+          userId: "user-1",
+        });
       });
 
       afterEach(async () => {
         await fs.cleanUp();
       });
 
-      it("cannot access", () => {
+      it("can read", async () => {
+        const ss = await fs.collection("groups").doc("group-1").get();
+        expect(ss.data()?.name).toBe("Group 1");
+      });
+
+      it("cannot write", async () => {
         return expect(
-          fs.collection("groups").doc("group-1").get()
+          fs.collection("groups").doc("group-1").set({ name: "updated" })
         ).rejects.toThrow();
       });
     });
 
     describe("non-participant", () => {
       beforeAll(async () => {
-        fs = prepareFirestore("user-999");
+        fs = prepareFirestore("user-1");
 
         await createGroupDoc({ id: "group-1", name: "Group 1" });
-        await createGroupUserDoc("group-1", { id: "user-1" });
+        await createGroupUserDoc({
+          groupId: "group-1",
+          privileges: {
+            login: false,
+          },
+          userId: "user-1",
+        });
       });
 
       afterAll(async () => {
@@ -80,6 +103,24 @@ describe("Group", () => {
       });
     });
 
+    describe("non-login user", () => {
+      beforeEach(async () => {
+        fs = prepareFirestore(undefined);
+
+        await createGroupDoc({ id: "group-1", name: "Group 1" });
+      });
+
+      afterEach(async () => {
+        await fs.cleanUp();
+      });
+
+      it("cannot access", () => {
+        return expect(
+          fs.collection("groups").doc("group-1").get()
+        ).rejects.toThrow();
+      });
+    });
+
     async function createGroupDoc(initial: Partial<Group>) {
       if (!initial.id) {
         throw new Error("ID is required for test");
@@ -92,21 +133,13 @@ describe("Group", () => {
       return doc;
     }
 
-    // TODO fix user data handling
-    async function createGroupUserDoc(
-      groupId: string,
-      initial: { id: string }
-      // initial: Partial<GroupUser>
-    ) {
-      const user = createUser({ id: initial.id });
+    async function createGroupUserDoc(initial: Partial<GroupPrivileges>) {
       const doc = await fs.admin
         .collection("groups")
-        .doc(groupId)
+        .doc(initial.groupId)
         .collection("users")
-        .doc(initial.id)
-        .set({
-          groupManager: true,
-        });
+        .doc(initial.userId)
+        .set(initial.privileges || {});
 
       return doc;
     }

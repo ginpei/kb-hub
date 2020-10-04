@@ -5,7 +5,6 @@ import { GroupIndexPage } from "./screens/groups/GroupIndexPage";
 import { GroupUserManagementPage } from "./screens/groups/GroupUserManagementPage.tsx";
 import { GroupViewPage } from "./screens/groups/GroupViewPage";
 import { KBEditPage } from "./screens/groups/kb/KBEditPage";
-import { KBIndexPage } from "./screens/groups/kb/KBIndexPage";
 import { KBNewPage } from "./screens/groups/kb/KBNewPage";
 import { KBViewPage } from "./screens/groups/kb/KBViewPage";
 import { NewGroupPage } from "./screens/groups/NewGroupPage";
@@ -26,7 +25,6 @@ export const Routings: React.FC = () => (
       path="/groups/:id/users"
       component={GroupUserManagementPage}
     />
-    <Route exact={true} path="/groups/:groupId/kb" component={KBIndexPage} />
     <Route exact={true} path="/groups/:groupId/kb/new" component={KBNewPage} />
     <Route exact={true} path="/groups/:groupId/kb/:id" component={KBViewPage} />
     <Route

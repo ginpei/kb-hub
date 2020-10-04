@@ -3,6 +3,7 @@ import firebase from "firebase/app";
 import React, { useCallback, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { KBEditForm } from "../../../groups/stables/KBEditForm";
+import { groupPath } from "../../../models/Group";
 import {
   createKnowledge,
   Knowledge,
@@ -39,7 +40,7 @@ export const KBNewPage: React.FC = provideGroupPage(() => {
     <BasicLayout title="New knowledge">
       <h1>New knowledge</h1>
       <p>
-        <Link to={knowledgePath("index", group)}>Back</Link>
+        <Link to={groupPath("view", group)}>Back</Link>
       </p>
       <KBEditForm
         disabled={saving}

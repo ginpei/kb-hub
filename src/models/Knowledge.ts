@@ -9,7 +9,7 @@ export interface Knowledge extends DataRecord {
   title: string;
 }
 
-type independentPathType = "index" | "new";
+type independentPathType = "new";
 
 type pathType = "view" | "edit";
 
@@ -39,10 +39,6 @@ export function knowledgePath(
 ): string {
   const groupId = typeof group === "string" ? group : group.id;
   const index = `/groups/${groupId}/kb`;
-
-  if (type === "index") {
-    return index;
-  }
 
   if (type === "new") {
     return `${index}/new`;

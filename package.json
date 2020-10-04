@@ -30,7 +30,7 @@
     "build-storybook": "build-storybook -s public",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
-    "emu": "firebase emulators:start --import firebase-emulator-export-empty --export-on-exit",
+    "emu": "firebase emulators:start --import firebase-emulator-export --export-on-exit",
     "lint": "eslint --ext js,ts,tsx .",
     "postinstall": "cp -r firebase-emulator-export-empty firebase-emulator-export",
     "start-for-emu": "REACT_APP_FB_EMU=1 npm run start",

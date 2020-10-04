@@ -5,6 +5,7 @@ import { User } from "./User";
 
 export interface Group extends DataRecord {
   name: string;
+  ownerIds: string[];
 }
 
 type independentPathType = "index" | "new";
@@ -15,6 +16,7 @@ export function createGroup(initial?: Partial<Group>): Group {
   return {
     ...createDataRecord(),
     name: "",
+    ownerIds: [],
     ...initial,
   };
 }

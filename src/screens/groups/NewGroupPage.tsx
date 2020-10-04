@@ -28,6 +28,11 @@ export const NewGroupPage: React.FC = () => {
     setSaveError(null);
     setSaving(true);
     try {
+      if (!user) {
+        throw new Error("User must have logged in");
+      }
+
+      group.ownerIds = [user.id];
       const savedGroup = await saveGroup(fs, group);
       history.push(groupPath("view", savedGroup));
     } catch (e) {

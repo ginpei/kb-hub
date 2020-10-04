@@ -165,9 +165,10 @@ export function getGroupCollection(
 
 export function getGroupDoc(
   fs: firebase.firestore.Firestore,
-  group: Group
+  group: Group | string
 ): firebase.firestore.DocumentReference<firebase.firestore.DocumentData> {
-  return getGroupCollection(fs).doc(group.id);
+  const id = typeof group === "string" ? group : group.id;
+  return getGroupCollection(fs).doc(id);
 }
 
 // TODO rename to ssToGroup

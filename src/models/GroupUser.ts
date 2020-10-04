@@ -15,6 +15,17 @@ export type RawGroupUser = Omit<GroupUser, "group" | "user"> & {
   user: firebase.firestore.DocumentReference<firebase.firestore.DocumentData>;
 };
 
+export type GroupPrivilegeMap = {
+  [privilege in GroupUserPrivilege]?: boolean;
+};
+
+export interface GroupPrivileges {
+  groupId: string;
+  userId: string;
+  privileges: GroupPrivilegeMap;
+}
+
+// TODO remove
 export type GroupUserPrivilege = typeof GroupUserPrivilege[number];
 
 /**
@@ -23,9 +34,14 @@ export type GroupUserPrivilege = typeof GroupUserPrivilege[number];
  */
 export type PrivilegeFlags = [GroupUserPrivilege, TriState];
 
-export const GroupUserPrivilege = ["login", "userManagement"] as const;
+export const GroupUserPrivilege = [
+  "groupManagement",
+  "login",
+  "userManagement",
+] as const;
 
 const privilegeLabels: Record<GroupUserPrivilege, string> = {
+  groupManagement: "Group management",
   login: "Login",
   userManagement: "User management",
 };

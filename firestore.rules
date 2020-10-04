@@ -5,7 +5,30 @@ service cloud.firestore {
       allow read, write: if false;
     }
     match /groups/{id} {
-      allow read, write: if request.auth.uid != null;
+      function getUser(userId) {
+        return get(
+          /databases/$(database)/documents/groups/$(id)/users/$(userId)
+        );
+      }
+
+      function isParticipant(userId) {
+        return getUser(userId).data.login;
+      }
+
+      function isGroupManager(userId) {
+        return getUser(userId).data.groupManagement;
+      }
+
+      function isUserManager(userId) {
+        return getUser(userId).data.userManagement;
+      }
+
+      allow read: if isParticipant(request.auth.uid);
+      allow write: if isGroupManager(request.auth.uid);
+
+      match /users/{userId} {
+        allow read, write: if isUserManager(request.auth.uid);
+      }
     }
     match /groupUsers/{id} {
       allow read, write: if request.auth.uid != null;

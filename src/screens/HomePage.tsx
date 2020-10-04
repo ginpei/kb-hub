@@ -3,7 +3,7 @@ import React from "react";
 import { Alert, Spinner } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useCurrentUserContext } from "../models/CurrentUserProvider";
-import { Group, groupPath } from "../models/Group";
+import { Group, groupPath, useRecentOwnGroups } from "../models/Group";
 import { useUserGroups } from "../models/GroupUser";
 import { knowledgePath, useLatestKnowledges } from "../models/Knowledge";
 import { useCurrentUser } from "../models/User";
@@ -32,8 +32,53 @@ export const HomePage: React.FC = () => {
           <Link to="/login">Login</Link>
         </li>
       </ul>
+      {user && <RecentGroupsSection />}
       {user && <RecentKnowledgeSection />}
     </BasicLayout>
+  );
+};
+
+const RecentGroupsSection: React.FC = () => {
+  const user = useCurrentUserContext();
+  const [groups, groupsReady, groupsError] = useRecentOwnGroups(fs, user);
+
+  const h2 = <h2>Your Groups</h2>;
+
+  if (!groupsReady) {
+    return (
+      <div>
+        {h2}
+        <Spinner animation="grow" size="sm" role="status" />
+      </div>
+    );
+  }
+
+  const error = groupsError;
+  if (error) {
+    return (
+      <div>
+        {h2}
+        <Alert variant="danger">Error: {error.message}</Alert>
+      </div>
+    );
+  }
+
+  return (
+    <div className="RecentGroupsSection">
+      {h2}
+      <ul>
+        {groups.length < 1 && (
+          <li>
+            <small>(No items)</small>
+          </li>
+        )}
+        {groups.map((group) => (
+          <li key={group.id}>
+            <Link to={groupPath("view", group)}>{group.name}</Link>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };
 

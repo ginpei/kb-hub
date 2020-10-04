@@ -56,7 +56,11 @@ export function groupPath(
   throw new Error(`Unknown path type "${type}"`);
 }
 
-export function useLatestGroups(
+/**
+ * @example
+ * const [groups, groupsReady, groupsError] = useRecentOwnGroups(fs, user);
+ */
+export function useRecentOwnGroups(
   fs: firebase.firestore.Firestore,
   user: User | null
 ): [Group[], boolean, Error | null] {
@@ -76,7 +80,9 @@ export function useLatestGroups(
     setReady(false);
 
     // TODO get items for user
-    const coll = getGroupCollection(fs).orderBy("updatedAt", "desc");
+    const coll = getGroupCollection(fs)
+      .where("ownerIds", "array-contains", user.id)
+      .orderBy("updatedAt", "desc");
     return coll.onSnapshot(
       (ss) => {
         setReady(true);

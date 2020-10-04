@@ -1,8 +1,9 @@
 import NiceMarkdown from "@ginpei/react-nice-markdown";
 import React from "react";
 import { Link } from "react-router-dom";
-import { BasicLayout } from "../../../share/composites/BasicLayout";
+import { groupPath } from "../../../models/Group";
 import { knowledgePath } from "../../../models/Knowledge";
+import { BasicLayout } from "../../../share/composites/BasicLayout";
 import { useGroupPageContext } from "../GroupPageContext";
 import {
   provideKnowledgePage,
@@ -17,7 +18,7 @@ export const KBViewPage = provideKnowledgePage(() => {
     <BasicLayout title="View">
       <h1>{knowledge.title || "(No title)"}</h1>
       <p>
-        <Link to={knowledgePath("index", group)}>Index</Link>
+        <Link to={groupPath("view", group)}>Back</Link>
         {" | "}
         <Link to={knowledgePath("edit", group, knowledge)}>Edit</Link>
       </p>

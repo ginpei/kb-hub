@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { noop } from "../misc/misc";
 import { createDataRecord, DataRecord, updateTimestamp } from "./DataRecord";
-import { createGroup, getGroupCollection, Group } from "./Group";
+import { getGroupCollection, Group } from "./Group";
 
 export interface Knowledge extends DataRecord {
   content: string;
-  group: Group;
+  groupId: string;
   title: string;
 }
 
@@ -17,7 +17,7 @@ export function createKnowledge(initial?: Partial<Knowledge>): Knowledge {
   return {
     ...createDataRecord(),
     content: "",
-    group: createGroup(),
+    groupId: "",
     title: "",
     ...initial,
   };
@@ -37,8 +37,8 @@ export function knowledgePath(
   group: Group | string,
   knowledge?: Knowledge
 ): string {
-  const gid = typeof group === "string" ? group : group.id;
-  const index = `/groups/${gid}/kb`;
+  const groupId = typeof group === "string" ? group : group.id;
+  const index = `/groups/${groupId}/kb`;
 
   if (type === "index") {
     return index;

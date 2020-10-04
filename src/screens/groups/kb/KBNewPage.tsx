@@ -1,3 +1,4 @@
+import NiceMarkdown from "@ginpei/react-nice-markdown";
 import firebase from "firebase/app";
 import React, { useCallback, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
@@ -8,6 +9,7 @@ import {
   knowledgePath,
   saveKnowledge,
 } from "../../../models/Knowledge";
+import { Details } from "../../../share/atoms/Details";
 import { BasicLayout } from "../../../share/composites/BasicLayout";
 import { provideGroupPage, useGroupPageContext } from "../GroupPageContext";
 
@@ -45,6 +47,9 @@ export const KBNewPage: React.FC = provideGroupPage(() => {
         onChange={onChange}
         onSubmit={onSubmit}
       />
+      <Details summary="Preview">
+        <NiceMarkdown content={knowledge.content} />
+      </Details>
     </BasicLayout>
   );
 });

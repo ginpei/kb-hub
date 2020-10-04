@@ -51,7 +51,7 @@ export const KBEditPage: React.FC = provideKnowledgePage(() => {
         onChange={onChange}
         onSubmit={onSubmit}
       />
-      <Details summary="Preview!!">
+      <Details summary="Preview">
         <NiceMarkdown content={knowledge.content} />
       </Details>
     </BasicLayout>

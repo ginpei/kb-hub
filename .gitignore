@@ -12,6 +12,7 @@
 /build
 
 # firebase
+/firebase-emulator-export/
 /.firebaserc
 /firebase-debug.log
 /firestore-debug.log

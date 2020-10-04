@@ -34,6 +34,11 @@ export const GroupIndexPage: React.FC = () => {
         <Link to={groupPath("new")}>Create a new group</Link>
       </p>
       <ul>
+        {groups.length < 1 && (
+          <li>
+            <small>(No items)</small>
+          </li>
+        )}
         {groups.map((group) => (
           <li key={group.id}>
             <Link to={groupPath("view", group)}>{group.name}</Link>

@@ -1,5 +1,6 @@
 import firebase from "firebase/app";
 import React, { useCallback, useState } from "react";
+import { Alert } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import { GroupForm } from "../../groups/stables/GroupForm";
 import { useCurrentUserContext } from "../../models/CurrentUserProvider";
@@ -13,6 +14,7 @@ export const NewGroupPage: React.FC = () => {
   const user = useCurrentUserContext();
   const [group, setGroup] = useState(createGroup());
   const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<Error | null>(null);
   const history = useHistory();
 
   const onChange = useCallback(
@@ -23,10 +25,16 @@ export const NewGroupPage: React.FC = () => {
   );
 
   const onSubmit = useCallback(async () => {
+    setSaveError(null);
     setSaving(true);
-    const savedGroup = await saveGroup(fs, group);
-    setSaving(false);
-    history.push(groupPath("view", savedGroup));
+    try {
+      const savedGroup = await saveGroup(fs, group);
+      history.push(groupPath("view", savedGroup));
+    } catch (e) {
+      setSaveError(e);
+    } finally {
+      setSaving(false);
+    }
   }, [group, history]);
 
   if (!user) {
@@ -39,6 +47,7 @@ export const NewGroupPage: React.FC = () => {
       <p>
         <Link to={groupPath("index")}>Back</Link>
       </p>
+      {saveError && <Alert variant="danger">{saveError.message}</Alert>}
       <GroupForm
         disabled={saving}
         group={group}

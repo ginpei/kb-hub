@@ -8,8 +8,14 @@ service cloud.firestore {
       allow update: if isOwner(resource) && isOwner(request.resource);
       allow delete: if isOwner(resource);
 
+      allow read: if isMember(resource);
+
       function isOwner(group) {
         return request.auth.uid in group.data.ownerIds;
+      }
+
+      function isMember(group) {
+        return request.auth.uid in group.data.memberIds;
       }
     }
 

@@ -4,6 +4,7 @@ import { createDataRecord, DataRecord, updateTimestamp } from "./DataRecord";
 import { User } from "./User";
 
 export interface Group extends DataRecord {
+  memberIds: string[];
   name: string;
   ownerIds: string[];
 }
@@ -15,6 +16,7 @@ type pathType = "view" | "edit" | "users";
 export function createGroup(initial?: Partial<Group>): Group {
   return {
     ...createDataRecord(),
+    memberIds: [],
     name: "",
     ownerIds: [],
     ...initial,
@@ -57,6 +59,7 @@ export function groupPath(
 }
 
 /**
+ * Connects to groups which you are member of.
  * @example
  * const [groups, groupsReady, groupsError] = useRecentOwnGroups(fs, user);
  */
@@ -81,7 +84,7 @@ export function useRecentOwnGroups(
 
     // TODO get items for user
     const coll = getGroupCollection(fs)
-      .where("ownerIds", "array-contains", user.id)
+      .where("memberIds", "array-contains", user.id)
       .orderBy("updatedAt", "desc");
     return coll.onSnapshot(
       (ss) => {

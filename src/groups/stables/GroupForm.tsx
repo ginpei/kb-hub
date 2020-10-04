@@ -38,7 +38,7 @@ export const GroupForm: React.FC<{
           value={group.name}
         />
       </Form.Group>
-      <Button disabled={disabled} variant="primary">
+      <Button disabled={disabled} type="submit" variant="primary">
         {group.id ? "Update" : "Create"}
       </Button>
     </Form>

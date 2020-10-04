@@ -1,18 +1,17 @@
 import firebase from "firebase/app";
 import React from "react";
 import { Link } from "react-router-dom";
-import { useCurrentUserContext } from "../../models/CurrentUserProvider";
 import { groupPath } from "../../models/Group";
 import { useUserGroups } from "../../models/GroupUser";
 import { BasicLayout } from "../../share/composites/BasicLayout";
 import { ErrorScreen } from "../ErrorScreen";
 import { LoadingScreen } from "../LoadingScreen";
 import { LoginScreen } from "../LoginScreen";
+import { provideLoggedInUser } from "../provideLoggedInUser";
 
 const fs = firebase.firestore();
 
-export const GroupIndexPage: React.FC = () => {
-  const user = useCurrentUserContext();
+export const GroupIndexPage = provideLoggedInUser(({ user }) => {
   const [groups, groupsReady, groupsError] = useUserGroups(fs, user);
 
   if (!groupsReady) {
@@ -47,4 +46,4 @@ export const GroupIndexPage: React.FC = () => {
       </ul>
     </BasicLayout>
   );
-};
+});

@@ -6,6 +6,11 @@ import { useCurrentUser, User } from "./User";
 
 const CurrentUserContext = createContext<User | null>({} as User);
 
+/**
+ * Provides current user.
+ * If you want to force user to have logged in, you can use
+ * `provideLoggedInUser()` instead.
+ */
 export const CurrentUserProvider: React.FC<{
   auth: firebase.auth.Auth;
   fs: firebase.firestore.Firestore;

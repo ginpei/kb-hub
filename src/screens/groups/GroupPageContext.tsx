@@ -2,13 +2,11 @@ import firebase from "firebase/app";
 import React, { createContext, useContext } from "react";
 import { useParams } from "../../misc/react-router-dom";
 import { createGroup, Group, useGroup } from "../../models/Group";
-import { useCurrentUser } from "../../models/User";
 import { ErrorScreen } from "../ErrorScreen";
 import { LoadingScreen } from "../LoadingScreen";
-import { LoginScreen } from "../LoginScreen";
 import { NotFoundScreen } from "../NotFoundScreen";
+import { provideLoggedInUser } from "../provideLoggedInUser";
 
-const auth = firebase.auth();
 const fs = firebase.firestore();
 
 const GroupPageContext = createContext(createGroup());
@@ -30,26 +28,20 @@ const GroupPageContext = createContext(createGroup());
  * });
  */
 export function provideGroupPage(Component: React.FC): React.FC {
-  return () => {
+  return provideLoggedInUser(({ user }) => {
     const params = useParams();
     const groupId = params.groupId || params.id;
     if (!groupId) {
       return <NotFoundScreen />;
     }
-    const [user, userReady, userError] = useCurrentUser(auth, fs);
     const [group, groupReady, groupError] = useGroup(fs, user, groupId);
 
-    if (!userReady || !groupReady) {
+    if (!groupReady) {
       return <LoadingScreen />;
     }
 
-    if (!user) {
-      return <LoginScreen />;
-    }
-
-    const error = userError || groupError;
-    if (error) {
-      return <ErrorScreen error={error} />;
+    if (groupError) {
+      return <ErrorScreen error={groupError} />;
     }
 
     if (!group) {
@@ -61,7 +53,7 @@ export function provideGroupPage(Component: React.FC): React.FC {
         <Component />
       </GroupPageContext.Provider>
     );
-  };
+  });
 }
 
 export function useGroupPageContext(): Group {

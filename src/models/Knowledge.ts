@@ -82,7 +82,7 @@ export function useLatestKnowledges(
       (ss) => {
         setError(null);
 
-        const values = ss.docs.map((v) => docToKnowledge(v));
+        const values = ss.docs.map((v) => v.data() as Knowledge);
         setKnowledges(values);
 
         setReady(true);
@@ -154,16 +154,18 @@ function getKnowledgeCollection(
   group: Group | string
 ) {
   const gid = typeof group === "string" ? group : group.id;
-  return getGroupCollection(fs).doc(gid).collection("knowledges");
-}
-
-function docToKnowledge(
-  ss: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>
-): Knowledge {
-  const data = ss.data();
-  const knowledge: Knowledge = {
-    ...createKnowledge(data),
-    id: ss.id,
-  };
-  return knowledge;
+  return getGroupCollection(fs)
+    .doc(gid)
+    .collection("knowledges")
+    .withConverter({
+      fromFirestore(ss) {
+        const data = ss.data();
+        const knowledge: Knowledge = {
+          ...createKnowledge(data),
+          id: ss.id,
+        };
+        return knowledge;
+      },
+      toFirestore: () => ({}), // TODO
+    });
 }

@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import { noop } from "../misc/misc";
 
 export function useDocument<T>(
-  doc: firebase.firestore.DocumentReference | null,
-  ssToData: (ss: firebase.firestore.DocumentSnapshot) => T
+  doc: firebase.firestore.DocumentReference | null
 ): [T | null, boolean, Error | null] {
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<Error | null>(null);
@@ -24,7 +23,8 @@ export function useDocument<T>(
           setError(null);
 
           if (ss.exists) {
-            setData(ssToData(ss));
+            // the doc ref is supposed to have converter by `withConverter()`
+            setData(ss.data() as T);
           } else {
             setData(null);
           }
@@ -38,7 +38,7 @@ export function useDocument<T>(
       );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [doc?.path, ssToData]
+    [doc?.path]
   );
 
   return [data, ready, error];

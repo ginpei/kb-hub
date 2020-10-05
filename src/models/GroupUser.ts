@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { TriState } from "../share/stables/TriCheckbox";
 import { createDataRecord, DataRecord, updateTimestamp } from "./DataRecord";
-import { createGroup, docToGroup, Group, getGroupDoc } from "./Group";
+import { createGroup, Group, getGroupDoc } from "./Group";
 import { createUser, getUserDoc, User, ssToUser } from "./User";
 
 export interface GroupUser extends DataRecord {
@@ -71,7 +71,7 @@ export function useUserGroups(
         return Promise.all(records.map((v) => v.group.get()));
       })
       .then((ssList) => {
-        const newGroups = ssList.map((v) => docToGroup(v));
+        const newGroups = ssList.map((v) => v.data() as Group);
         setGroups(newGroups);
       })
       .catch((e) => setError(e))
@@ -250,7 +250,7 @@ async function docToResolvedGroupUser(
 
   const groupUser: GroupUser = {
     ...raw,
-    group: docToGroup(ssGroup),
+    group: ssGroup.data() as Group,
     user: ssToUser(ssUser),
   };
   return groupUser;

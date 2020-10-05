@@ -91,7 +91,7 @@ export function useRecentOwnGroups(
       (ss) => {
         setError(null);
 
-        const values = ss.docs.map((v) => docToGroup(v));
+        const values = ss.docs.map((v) => v.data() as Group);
         setGroups(values);
 
         setReady(true);
@@ -138,7 +138,17 @@ export async function saveGroup(
 export function getGroupCollection(
   fs: firebase.firestore.Firestore
 ): firebase.firestore.CollectionReference<firebase.firestore.DocumentData> {
-  return fs.collection("groups");
+  return fs.collection("groups").withConverter({
+    fromFirestore(ss) {
+      const data = ss.data();
+      const group: Group = {
+        ...createGroup(data),
+        id: ss.id,
+      };
+      return group;
+    },
+    toFirestore: () => ({}), // TODO
+  });
 }
 
 export function getGroupDoc(
@@ -146,18 +156,6 @@ export function getGroupDoc(
   group: Group
 ): firebase.firestore.DocumentReference<firebase.firestore.DocumentData> {
   return getGroupCollection(fs).doc(group.id);
-}
-
-// TODO rename to ssToGroup
-export function docToGroup(
-  ss: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>
-): Group {
-  const data = ss.data();
-  const group: Group = {
-    ...createGroup(data),
-    id: ss.id,
-  };
-  return group;
 }
 
 function useGroupDoc(fs: firebase.firestore.Firestore, id: string) {

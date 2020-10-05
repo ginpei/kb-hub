@@ -4,7 +4,6 @@ import { Alert, Spinner } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useCurrentUserContext } from "../models/CurrentUserProvider";
 import { Group, groupPath, useRecentOwnGroups } from "../models/Group";
-import { useUserGroups } from "../models/GroupUser";
 import { knowledgePath, useLatestKnowledges } from "../models/Knowledge";
 import { useCurrentUser } from "../models/User";
 import { BasicLayout } from "../share/composites/BasicLayout";
@@ -84,7 +83,7 @@ const RecentGroupsSection: React.FC = () => {
 
 const RecentKnowledgeSection: React.FC = () => {
   const [user, userReady, userError] = useCurrentUser(auth, fs);
-  const [groups, groupsReady, groupsError] = useUserGroups(fs, user);
+  const [groups, groupsReady, groupsError] = useRecentOwnGroups(fs, user);
 
   const h2 = <h2>Recent Knowledge</h2>;
 
@@ -110,6 +109,11 @@ const RecentKnowledgeSection: React.FC = () => {
   return (
     <div className="RecentKnowledgeSection">
       {h2}
+      {groups.length < 1 && (
+        <p>
+          <small>(No items)</small>
+        </p>
+      )}
       {groups.map((group) => (
         <RecentGroupKnowledges group={group} key={group.id} />
       ))}

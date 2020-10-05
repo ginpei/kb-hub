@@ -88,11 +88,12 @@ export function useRecentOwnGroups(
       .orderBy("updatedAt", "desc");
     return coll.onSnapshot(
       (ss) => {
-        setReady(true);
         setError(null);
 
         const values = ss.docs.map((v) => docToGroup(v));
         setGroups(values);
+
+        setReady(true);
       },
       (e) => {
         setReady(true);
@@ -127,7 +128,6 @@ export function useGroup(
     const doc = getGroupCollection(fs).doc(id);
     return doc.onSnapshot(
       (ss) => {
-        setReady(true);
         setError(null);
 
         if (ss.exists) {
@@ -136,6 +136,8 @@ export function useGroup(
         } else {
           setGroup(null);
         }
+
+        setReady(true);
       },
       (e) => {
         setReady(true);

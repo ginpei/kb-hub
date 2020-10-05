@@ -79,11 +79,12 @@ export function useLatestKnowledges(
     const coll = getKnowledgeCollection(fs, group).orderBy("updatedAt", "desc");
     return coll.onSnapshot(
       (ss) => {
-        setReady(true);
         setError(null);
 
         const values = ss.docs.map((v) => docToKnowledge(v));
         setKnowledges(values);
+
+        setReady(true);
       },
       (e) => {
         setReady(true);
@@ -118,7 +119,6 @@ export function useKnowledge(
     const doc = getKnowledgeCollection(fs, group).doc(id);
     return doc.onSnapshot(
       (ss) => {
-        setReady(true);
         setError(null);
 
         if (ss.exists) {
@@ -127,6 +127,8 @@ export function useKnowledge(
         } else {
           setKnowledge(null);
         }
+
+        setReady(true);
       },
       (e) => {
         setReady(true);

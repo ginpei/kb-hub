@@ -110,7 +110,8 @@ export function useGroup(
   fs: firebase.firestore.Firestore,
   id: string
 ): [Group | null, boolean, Error | null] {
-  return useDocument(getGroupCollection(fs).doc(id), docToGroup);
+  const doc = useGroupDoc(fs, id);
+  return useDocument(doc);
 }
 
 export async function saveGroup(
@@ -157,4 +158,15 @@ export function docToGroup(
     id: ss.id,
   };
   return group;
+}
+
+function useGroupDoc(fs: firebase.firestore.Firestore, id: string) {
+  const [doc, setDoc] = useState<firebase.firestore.DocumentReference | null>(
+    null
+  );
+
+  useEffect(() => {
+    setDoc(getGroupCollection(fs).doc(id));
+  }, [fs, id]);
+  return doc;
 }

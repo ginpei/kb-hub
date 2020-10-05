@@ -102,20 +102,8 @@ export function useKnowledge(
   group: Group | string | null,
   id: string
 ): [Knowledge | null, boolean, Error | null] {
-  const [doc, setDoc] = useState<firebase.firestore.DocumentReference | null>(
-    null
-  );
-
-  const groupId = typeof group === "string" ? group : group?.id ?? null;
-  useEffect(() => {
-    if (groupId) {
-      setDoc(getKnowledgeCollection(fs, groupId).doc(id));
-    } else {
-      setDoc(null);
-    }
-  }, [fs, groupId, id]);
-
-  return useDocument(doc, docToKnowledge);
+  const doc = useKnowledgeDoc(fs, group, id);
+  return useDocument(doc);
 }
 
 export async function saveKnowledge(
@@ -138,6 +126,27 @@ export async function saveKnowledge(
     ...present,
     id: doc.id,
   };
+}
+
+function useKnowledgeDoc(
+  fs: firebase.firestore.Firestore,
+  group: Group | string | null,
+  id: string
+) {
+  const [doc, setDoc] = useState<firebase.firestore.DocumentReference | null>(
+    null
+  );
+
+  const groupId = typeof group === "string" ? group : group?.id ?? null;
+  useEffect(() => {
+    if (groupId) {
+      setDoc(getKnowledgeCollection(fs, groupId).doc(id));
+    } else {
+      setDoc(null);
+    }
+  }, [fs, groupId, id]);
+
+  return doc;
 }
 
 function getKnowledgeCollection(

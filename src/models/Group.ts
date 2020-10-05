@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { noop } from "../misc/misc";
 import { createDataRecord, DataRecord, updateTimestamp } from "./DataRecord";
+import { useDocument } from "./firebaseHooks";
 import { User } from "./User";
 
 export interface Group extends DataRecord {
@@ -107,46 +108,9 @@ export function useRecentOwnGroups(
 
 export function useGroup(
   fs: firebase.firestore.Firestore,
-  user: User | null,
   id: string
 ): [Group | null, boolean, Error | null] {
-  const [group, setGroup] = useState<Group | null>(null);
-  const [ready, setReady] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
-
-  useEffect(() => {
-    setGroup(null);
-    setError(null);
-
-    if (!user) {
-      setReady(true);
-      return noop;
-    }
-
-    setReady(false);
-
-    const doc = getGroupCollection(fs).doc(id);
-    return doc.onSnapshot(
-      (ss) => {
-        setError(null);
-
-        if (ss.exists) {
-          const values = docToGroup(ss);
-          setGroup(values);
-        } else {
-          setGroup(null);
-        }
-
-        setReady(true);
-      },
-      (e) => {
-        setReady(true);
-        setError(e);
-      }
-    );
-  }, [fs, user, id]);
-
-  return [group, ready, error];
+  return useDocument(getGroupCollection(fs).doc(id), docToGroup);
 }
 
 export async function saveGroup(

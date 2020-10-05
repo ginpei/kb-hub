@@ -28,13 +28,13 @@ const GroupPageContext = createContext(createGroup());
  * });
  */
 export function provideGroupPage(Component: React.FC): React.FC {
-  return provideLoggedInUser(({ user }) => {
+  return provideLoggedInUser(() => {
     const params = useParams();
     const groupId = params.groupId || params.id;
     if (!groupId) {
       return <NotFoundScreen />;
     }
-    const [group, groupReady, groupError] = useGroup(fs, user, groupId);
+    const [group, groupReady, groupError] = useGroup(fs, groupId);
 
     if (!groupReady) {
       return <LoadingScreen />;

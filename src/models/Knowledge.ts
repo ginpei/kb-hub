@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { noop } from "../misc/misc";
 import { createDataRecord, DataRecord, updateTimestamp } from "./DataRecord";
+import { useDocument } from "./firebaseHooks";
 import { getGroupCollection, Group } from "./Group";
 
 export interface Knowledge extends DataRecord {
@@ -101,43 +102,20 @@ export function useKnowledge(
   group: Group | string | null,
   id: string
 ): [Knowledge | null, boolean, Error | null] {
-  const [knowledge, setKnowledge] = useState<Knowledge | null>(null);
-  const [ready, setReady] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+  const [doc, setDoc] = useState<firebase.firestore.DocumentReference | null>(
+    null
+  );
 
+  const groupId = typeof group === "string" ? group : group?.id ?? null;
   useEffect(() => {
-    setKnowledge(null);
-    setError(null);
-
-    if (!group) {
-      setReady(true);
-      return noop;
+    if (groupId) {
+      setDoc(getKnowledgeCollection(fs, groupId).doc(id));
+    } else {
+      setDoc(null);
     }
+  }, [fs, groupId, id]);
 
-    setReady(false);
-
-    const doc = getKnowledgeCollection(fs, group).doc(id);
-    return doc.onSnapshot(
-      (ss) => {
-        setError(null);
-
-        if (ss.exists) {
-          const values = docToKnowledge(ss);
-          setKnowledge(values);
-        } else {
-          setKnowledge(null);
-        }
-
-        setReady(true);
-      },
-      (e) => {
-        setReady(true);
-        setError(e);
-      }
-    );
-  }, [fs, group, id]);
-
-  return [knowledge, ready, error];
+  return useDocument(doc, docToKnowledge);
 }
 
 export async function saveKnowledge(
